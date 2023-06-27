@@ -246,4 +246,120 @@ class QuizController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
     }
+    protected function getResultInfo($sub_id){
+        $sub = Submission::findOrFail($sub_id);
+        $quiz = $sub->quiz;
+        $questions = $quiz->questions;
+
+        $max_point = 0.0;
+        for($i = 0; $i < count($questions); ++$i) {
+            $max_point += $questions[$i]->points;
+        }
+
+        $real_point = 0.0;
+
+        $option_correct = [];
+        $matches_correct = [];
+
+        foreach($questions as $question) {
+            if($question->question_type == 'Option') {
+                $correctOption = $question->options()->firstWhere('is_correct', true);
+                $selectedOption = $sub->options()->firstWhere('question_id', $question->id);
+                if(!$selectedOption) {
+                    array_push($option_correct, (object)[
+                        'question_id' => $question->id,
+                        'selected_option_id' => null,
+                        'correct_option_id' => $correctOption->id,
+                        'correct' => false,
+                        'points' => 0.0
+                    ]);
+                }
+                else {
+                    $correct = $correctOption->id == $selectedOption->option_id;
+                    $points = floatval($question->points);
+                    if(!$correct) {
+                        $points = 0.0;
+                    }
+                    array_push($option_correct, (object)[
+                        'question_id' => $question->id,
+                        'selected_option_id' => $selectedOption->option_id,
+                        'correct_option_id' => $correctOption->id,
+                        'correct' => $correct,
+                        'points' => $points
+                    ]);
+                    $real_point += $points;
+                }
+            }
+            else if($question->question_type == 'Match') {
+
+
+                $right_matches = $question->matches()->where('is_right', true)->get();
+                $left_matches = $question->matches()->where('is_right', false)->get();
+
+                $point_per_match = floatval($question->points) / $question->matches()->where('is_right', false)->count();
+
+                // For each left match in this question
+                foreach($left_matches as $left_match) {
+
+                    // Get correct right match for this left
+                    $correct_right_match = $right_matches->firstWhere('parent_id', $left_match->id);
+
+                    // Get user right match
+                    $user_left_match = $sub->matches()->firstWhere('left_match_id', $left_match->id);
+
+                    // If user didnt select (wtf?)
+                    if(!$user_left_match) {
+                        array_push($matches_correct, (object)[
+                                'question_id' => $question->id,
+                                'left_id' => $left_match->id,
+                                'selected_right_id' => null,
+                                'correct_right_id' => $correct_right_match->id,
+                                'correct' => false,
+                                'points' => 0.0
+                            ]);
+                    }
+                    else {
+                        $correct = $user_left_match->right_match_id == $correct_right_match->id;
+                        $points = $point_per_match;
+                        if(!$correct) {
+                            $points = 0.0;
+                        }
+
+                        array_push($matches_correct, (object)[
+                            'question_id' => $question->id,
+                            'left_id' => $left_match->id,
+                            'selected_right_id' => $user_left_match->right_match_id,
+                            'correct_right_id' => $correct_right_match->id,
+                            'correct' => $correct,
+                            'points' => $points
+                        ]);
+                        $real_point += $points;
+                    }
+                }
+            }
+        }
+
+        $subDetails = (object) [
+            'submission:' => $sub,
+            'answers' => (object) [
+                'options' => $sub->options,
+                'matches' => $sub->matches
+            ],
+            'total' => (object) [
+                'max_point' => $max_point,
+                'points' => $real_point,
+                'correct_options' => $option_correct,
+                'correct_matches' => $matches_correct
+            ]
+        ];
+        return response()->json([
+            'retCode' => Response::HTTP_OK,
+            'retMsg' => 'OK',
+            'result' => $subDetails
+        ]);
+    }
+
+    public function result($sub_id) {
+        return view('quiz/result', ['sub_id' => $sub_id]);
+    }
 }

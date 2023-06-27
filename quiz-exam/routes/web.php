@@ -27,6 +27,7 @@ Route::post('/login', [RegisterController::class, 'login'])->name('login');
 
 Route::prefix('api')->group(function() {
     Route::get('/quizzes', [QuizController::class, 'index']);
+    Route::get('/result/{sub_id}', [QuizController::class, 'getResultInfo']);
     Route::get('/questions/{quiz_id}', [QuizController::class, 'questions']);
     Route::get('/options/{quiz_id}', [QuizController::class, 'options']);
     Route::get('/matches/{quiz_id}', [QuizController::class, 'matches']);
@@ -37,6 +38,7 @@ Route::prefix('quiz')->group(function () {
     Route::get('/{quiz_id}', [QuizController::class, 'details']);
     Route::get('/take/{quiz_id}', [QuizController::class, 'take']);
     Route::post('/store', [QuizController::class, 'storeAnswer']);
+    Route::get('/result/{sub_id}', [QuizController::class, 'result']);
 });
 
 Route::middleware(['auth'])->group(function () {

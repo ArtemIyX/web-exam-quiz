@@ -9,7 +9,7 @@ class MatchItem extends Model
 {
     use HasFactory;
     protected $table = 'matches';
-    protected $fillable = ['question_id', 'left_item', 'is_right', 'parent_id'];
+    protected $fillable = ['question_id', 'item', 'is_right', 'parent_id'];
 
     public function question()
     {

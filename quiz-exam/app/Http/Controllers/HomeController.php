@@ -18,10 +18,6 @@ class HomeController extends Controller
 
     public function user()
     {
-        // Check if user is authenticated
-        if (!Auth::check()) {
-            return redirect('/');
-        }
         // Get the authenticated user
         $user = Auth::user();
 

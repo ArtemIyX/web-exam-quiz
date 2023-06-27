@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Services\QuizService;
+use \Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -108,9 +109,13 @@ class QuizController extends Controller
     }
 
     public function take($quiz_id) {
-        return view('quiz/question', ['quiz_id' => $quiz_id]);
+        $u = Auth::user();
+        return view('quiz/question', ['quiz_id' => $quiz_id], ['user_id' => $u->id]);
     }
-    public function storeAnswer($quiz_id, $question_id) {
+    public function storeAnswer(Request $request) {
+        // Retrieve the JSON data from the request body
+        $jsonData = $request->json()->all();
 
+        return view('index')->with('message', $jsonData);
     }
 }

@@ -5,6 +5,7 @@
 @section('content')
 <div id="questions-container"></div>
 <button id="sendButton">Finish</button>
+
 <script src="{{ asset('js/quiz/question.js') }}"></script>
 <script>
     async function load() {
@@ -16,8 +17,13 @@
     async function finishClick() {
         const questionOptions = await grabAllOptionsQuestions();
         const matchesOptions = await grabAllMatchesQuestions();
-        console.log(questionOptions);
-        console.log(matchesOptions);
+        const payload = {
+            quiz_id: {{$quiz_id}},
+            user_id: {{$user_id}},
+            options: questionOptions,
+            matches: matchesOptions,
+        };
+        console.log(payload);
     }
 
     // Get a reference to the button element

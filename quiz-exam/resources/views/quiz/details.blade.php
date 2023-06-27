@@ -10,14 +10,4 @@
 <p>Time Passed: {{ $quizDetails->times_passed }}</p>
 <a href="take/{{$quizDetails->id}}">Take!</a>
 
-@if ($errors->any())
-    <div>
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
 @endsection

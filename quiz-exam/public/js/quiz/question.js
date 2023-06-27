@@ -85,6 +85,7 @@ async function renderMatches(macthesContainer, matches) {
 async function renderQuestions(questions) {
     const container = document.getElementById('questions-container');
 
+    const promises = [];
     for (let i = 0; i < questions.length; i++) {
         const question = questions[i];
 
@@ -101,22 +102,25 @@ async function renderQuestions(questions) {
 
         // Check if the question type is "Option"
         if (questions[i].question_type === "Option") {
-            // If it is, load the options asynchronously
-            const options = await loadOptions(questions[i].id);
-            // Render the answers using the loaded options
-            await renderAnswers(questionDiv, options);
+
+            promises.push(loadOptions(questions[i].id).then(options => {
+                // Render the answers using the loaded options
+                return renderAnswers(questionDiv, options);
+            }));
         }
         // Check if the question type is "Match"
         else if (questions[i].question_type == "Match") {
-            // If it is, load the matches asynchronously
-            const matches = await loadMatches(questions[i].id);
-            // Render the matches using the loaded matches
-            await renderMatches(questionDiv, matches);
+
+            promises.push(loadMatches(questions[i].id).then(matches => {
+                // Render the matches using the loaded matches
+                return renderMatches(questionDiv, matches);
+            }));
         }
         questionDiv.appendChild(hr);
         // Append the question div to the container
         container.appendChild(questionDiv);
     }
+    await Promise.all(promises);
 }
 
 function getRadioOptions(radioButtons) {

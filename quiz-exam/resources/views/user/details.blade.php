@@ -73,22 +73,6 @@
         </form>
       </div>
 
-
-
-    @if(Session::has('message'))
-        <div>
-            {{ Session::get('message') }}
-        </div>
-    @endif
-    @if ($errors->any())
-    <div>
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
     <script>
         // Toggle Edit Form on Button Click
         document.getElementById('editButton').addEventListener('click', function() {

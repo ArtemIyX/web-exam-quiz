@@ -22,12 +22,12 @@ function applyUserDetails(submitter) {
 
 function applyQuizDetails(quiz) {
     const quizTitleElement = document.getElementById("quiz_title");
-    const quizAuthorElement = document.getElementById("quiz_author");
+    const quizDescElement = document.getElementById("quiz_desc");
     const quizQuestionNumberElement = document.getElementById("quiz_question_number");
     const quizTimesPassedElement = document.getElementById("quiz_times_passes")
 
     quizTitleElement.textContent = quiz.title;
-    quizAuthorElement.textContent = quiz.description;
+    quizDescElement.textContent = quiz.description;
     quizTimesPassedElement.textContent = quiz.times_passed;
     quizQuestionNumberElement.textContent = quiz.questions.length;
 }

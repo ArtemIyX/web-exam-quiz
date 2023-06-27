@@ -10,7 +10,7 @@
 <h2>Quiz Details</h2>
 <h3 id="quiz_title"></h3>
 <p>
-    Author: <span id="quiz_author"></span>
+    Description: <span id="quiz_desc"></span>
 </p>
 <p>
     Questions: <span id="quiz_question_number"></span>

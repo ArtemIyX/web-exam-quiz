@@ -41,7 +41,7 @@ async function renderQuizzes() {
         const quizzes = await fetchQuizzes();
         let html = '';
         for (const quiz of quizzes) {
-            const { title, description, author_id, created_at } = quiz;
+            const {id, title, description, author_id, created_at } = quiz;
             const userName = await fetchUserName(author_id);
             const date = new Date(created_at);
             const formattedDate = date.toLocaleDateString();
@@ -51,6 +51,7 @@ async function renderQuizzes() {
                     <p>${description}</p>
                     <p>Author: ${userName}</p>
                     <p>Created at: ${formattedDate}</p>
+                    <a href=/quizzes/${id}>Check</a>
                 </div>
                 <hr>
             `;

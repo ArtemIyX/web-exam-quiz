@@ -18,4 +18,16 @@ class QuizController extends Controller
             'result' => $quizzes
         ]);
     }
+
+    public function details($id, QuizService $quizService) {
+        $quiz = $quizService->getQuizById($id);
+        $quizDetails = (object) [
+            'title' => $quiz->title,
+            'description' => $quiz->description,
+            'author_name' => $quiz->author->name,
+            'questions_count' => $quiz->questions->count(),
+            'times_passed' => $quiz->times_passed
+        ];
+        return view('quiz/details', ['quizDetails' => $quizDetails]);
+    }
 }

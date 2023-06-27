@@ -40,3 +40,5 @@ Route::get('/logout', [RegisterController::class, 'logout'])->name('logout');
 
 Route::get('/api/quizzes', [QuizController::class, 'index']);
 Route::get('/api/users/{id}', [UserController::class, 'getUserNameById']);
+
+Route::get('/quizzes/{id}', [QuizController::class, 'details']);

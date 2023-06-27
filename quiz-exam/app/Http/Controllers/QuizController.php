@@ -118,6 +118,58 @@ class QuizController extends Controller
         return view('quiz/question', ['quiz_id' => $quiz_id], ['user_id' => $u->id]);
     }
 
+    protected function getQuiz($jsonData) : Quiz | null {
+        $quiz_need_id = $jsonData['quiz_id'];
+        try {
+            return Quiz::findOrFail($quiz_need_id);
+        } catch (ModelNotFoundException $e) {
+            return null;
+        }
+    }
+
+    protected function grabOptionAnswers($quiz, $submission, $answers_options, &$submission_options) : bool {
+        for($i = 0; $i < count($answers_options); ++$i) {
+            $current_answer = $answers_options[$i];
+            $q_id = $current_answer['question_id'];
+            $selected_id = $current_answer['selected_id'];
+            if ($quiz->questions->contains('id', $q_id)) {
+                $submissionOption = new SubmissionOption();
+                $submissionOption->submission_id = $submission->id;
+                $submissionOption->question_id = $q_id;
+                $submissionOption->option_id = $selected_id;
+
+                array_push($submission_options, $submissionOption);
+            }
+            else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    protected function grabMatchAnswers($quiz, $submission, $answers_matches, &$submission_matches) : bool {
+        for($i = 0; $i < count($answers_matches); ++$i) {
+            $current_answer = $answers_matches[$i];
+            $q_id = $current_answer['question_id'];
+            $left_id = $current_answer['left_id'];
+            $right_id = $current_answer['right_id'];
+
+            if($quiz->questions->contains('id', $q_id)) {
+                $submissionMatch = new SubmissionMatch();
+                $submissionMatch->submission_id = $submission->id;
+                $submissionMatch->question_id = $q_id;
+                $submissionMatch->left_match_id = $left_id;
+                $submissionMatch->right_match_id = $right_id;
+
+                array_push($submission_matches, $submissionMatch);
+            }
+            else {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public function storeAnswer(Request $request)
     {
         try {
@@ -130,11 +182,8 @@ class QuizController extends Controller
                     'result' => null
                 ]);
             }
-            $quiz = null;
-            $quiz_need_id = $jsonData['quiz_id'];
-            try {
-                $quiz = Quiz::findOrFail($quiz_need_id);
-            } catch (ModelNotFoundException $e) {
+            $quiz = $this->getQuiz($jsonData);
+            if($quiz == null) {
                 return response()->json([
                     'retCode' => Response::HTTP_NOT_FOUND,
                     'retMsg' => 'Quiz {$quiz_need_id} - NOT FOUND',
@@ -145,63 +194,40 @@ class QuizController extends Controller
             $submission = new Submission();
             $submission->user_id = $user->id;
             $submission->quiz_id = $quiz->id;
-
             $submission->save();
-
 
             // Save options
             $answers_options = $request['options'];
 
             $submission_options = [];
-            for($i = 0; $i < count($answers_options); ++$i) {
-                $current_answer = $answers_options[$i];
-                $q_id = $current_answer['question_id'];
-                $selected_id = $current_answer['selected_id'];
-                if ($quiz->questions->contains('id', $q_id)) {
-                    $submissionOption = new SubmissionOption();
-                    $submissionOption->submission_id = $submission->id;
-                    $submissionOption->question_id = $q_id;
-                    $submissionOption->option_id = $selected_id;
-
-                    array_push($submission_options, $submissionOption);
-                }
-                else {
-                    $submission->delete();
-                    return response()->json([
-                        'retCode' => Response::HTTP_BAD_REQUEST,
-                        'retMsg' => 'Question {$q_id} doesnt belong to this quiz',
-                        'result' => null
-                    ], Response::HTTP_BAD_REQUEST);
-                }
+            if($this->grabOptionAnswers($quiz, $submission, $answers_options, $submission_options)) {
+                // all is fine
             }
+            else {
+                $submission->delete();
+                return response()->json([
+                    'retCode' => Response::HTTP_BAD_REQUEST,
+                    'retMsg' => 'Question {$q_id} doesnt belong to this quiz',
+                    'result' => null
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
             $submission->options()->saveMany($submission_options);
 
             // Save matches
             $answers_matches = $request['matches'];
             $submission_matches = [];
-            for($i = 0; $i < count($answers_matches); ++$i) {
-                $current_answer = $answers_matches[$i];
-                $q_id = $current_answer['question_id'];
-                $left_id = $current_answer['left_id'];
-                $right_id = $current_answer['right_id'];
 
-                if($quiz->questions->contains('id', $q_id)) {
-                    $submissionMatch = new SubmissionMatch();
-                    $submissionMatch->submission_id = $submission->id;
-                    $submissionMatch->question_id = $q_id;
-                    $submissionMatch->left_match_id = $left_id;
-                    $submissionMatch->right_match_id = $right_id;
-
-                    array_push($submission_matches, $submissionMatch);
-                }
-                else {
-                    $submission->delete();
-                    return response()->json([
-                        'retCode' => Response::HTTP_BAD_REQUEST,
-                        'retMsg' => 'Question {$q_id} doesnt belong to this quiz',
-                        'result' => null
-                    ], Response::HTTP_BAD_REQUEST);
-                }
+            if($this->grabMatchAnswers($quiz, $submission, $answers_matches, $submission_matches)) {
+                // All is fine
+            }
+            else {
+                $submission->delete();
+                return response()->json([
+                    'retCode' => Response::HTTP_BAD_REQUEST,
+                    'retMsg' => 'Question {$q_id} doesnt belong to this quiz',
+                    'result' => null
+                ], Response::HTTP_BAD_REQUEST);
             }
             $submission->matches()->saveMany($submission_matches);
 

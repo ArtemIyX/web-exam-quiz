@@ -15,7 +15,9 @@
 
     async function finishClick() {
         const questionOptions = await grabAllOptionsQuestions();
+        const matchesOptions = await grabAllMatchesQuestions();
         console.log(questionOptions);
+        console.log(matchesOptions);
     }
 
     // Get a reference to the button element

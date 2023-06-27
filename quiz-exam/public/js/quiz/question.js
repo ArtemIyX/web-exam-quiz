@@ -90,7 +90,7 @@ async function renderQuestions(questions) {
 
         const questionDiv = document.createElement('div');
         questionDiv.classList.add(`question_${questions[i].question_type}`);
-
+        questionDiv.setAttribute('question_id', questions[i].id);
         const questionText = document.createElement('p');
         const questionPoints = document.createElement('p');
         const hr = document.createElement('hr');
@@ -127,6 +127,7 @@ function getRadioOptions(radioButtons) {
     }
     return res;
 }
+
 function getChecked(radioButtons) {
     for (let i = 0; i < radioButtons.length; ++i) {
         if (radioButtons[i].checked) {
@@ -141,6 +142,7 @@ async function grabAllOptionsQuestions() {
     const questionOptions = document.getElementsByClassName('question_Option');
     const result = [];
     for(let i = 0; i < questionOptions.length; ++i) {
+        q_id = questionOptions[i].getAttribute('question_id');
         // Get all options for this question
         const optionContainers = questionOptions[i].querySelectorAll('.option-container');
         // Get all child input elements with type 'radio'
@@ -148,7 +150,7 @@ async function grabAllOptionsQuestions() {
         const checkedRadio = getChecked(radioOptions);
 
         const data = {
-            question_id: radioOptions[0].name,
+            question_id: q_id,
             selected_id: null
         };
 
@@ -160,4 +162,23 @@ async function grabAllOptionsQuestions() {
     return result;
 }
 
-
+async function grabAllMatchesQuestions() {
+    const matchesOptions = document.getElementsByClassName('question_Match');
+    const result = [];
+    for(let i = 0; i < matchesOptions.length; ++i) {
+        const q_id = matchesOptions[i].getAttribute('question_id');
+        // Get all matches for this question
+        const matchContainers = matchesOptions[i].querySelectorAll('.match-container');
+        console.log()
+        for(let j = 0; j < matchContainers.length; ++j) {
+            const select = matchContainers[j].querySelector('select');
+            const data = {
+                question_id: q_id,
+                left_id: select.name,
+                right_id: select.value
+            };
+            result.push(data);
+        }
+    }
+    return result;
+}

@@ -4,7 +4,7 @@
 
 @section('content')
 <div id="questions-container"></div>
-
+<button id="sendButton">Finish</button>
 <script src="{{ asset('js/quiz/question.js') }}"></script>
 <script>
     async function load() {
@@ -12,5 +12,16 @@
         renderQuestions(res);
     }
     load();
+
+    async function finishClick() {
+        const questionOptions = await grabAllOptionsQuestions();
+        console.log(questionOptions);
+    }
+
+    // Get a reference to the button element
+    const button = document.getElementById('sendButton');
+
+    // Bind the click event to the button and associate it with the buttonClick function
+    button.addEventListener('click', finishClick);
 </script>
 @endsection

@@ -2,14 +2,22 @@
 
 namespace App\Models;
 
-use App\Models\MatchItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Question extends Model
+class Submission extends Model
 {
     use HasFactory;
-    protected $fillable = ['quiz_id', 'question', 'question_type', 'points'];
+    protected $table = 'submissions';
+
+    protected $fillable = [
+        'user_id', 'quiz_id',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function quiz()
     {
@@ -18,7 +26,7 @@ class Question extends Model
 
     public function options()
     {
-        return $this->hasMany(OptionItem::class);
+        return $this->hasMany(Option::class);
     }
 
     public function matches()

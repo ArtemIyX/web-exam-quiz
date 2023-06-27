@@ -51,7 +51,7 @@ async function renderQuizzes() {
                     <p>${description}</p>
                     <p>Author: ${userName}</p>
                     <p>Created at: ${formattedDate}</p>
-                    <a href=/quizzes/${id}>Check</a>
+                    <a href=/quiz/${id}>Check</a>
                 </div>
                 <hr>
             `;

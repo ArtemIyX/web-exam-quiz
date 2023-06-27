@@ -17,12 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('home');
-// });
-
 Route::get('/', [HomeController::class, 'index'])->name('index');
-
 
 Route::get('/user/details', [HomeController::class, 'user'])->name('user.details');
 Route::redirect('/user/', '/user/details');
@@ -38,7 +33,15 @@ Route::post('/login', [RegisterController::class, 'login'])->name('login');
 
 Route::get('/logout', [RegisterController::class, 'logout'])->name('logout');
 
-Route::get('/api/quizzes', [QuizController::class, 'index']);
-Route::get('/api/users/{id}', [UserController::class, 'getUserNameById']);
+Route::prefix('api')->group(function() {
+    Route::get('/quizzes', [QuizController::class, 'index']);
+    Route::get('/quiz/{id}', [QuizController::class, 'questions']);
+    Route::get('/question/{id}', [QuizController::class, 'options']);
+    Route::get('/users/{id}', [UserController::class, 'getUserNameById']);
+});
 
-Route::get('/quizzes/{id}', [QuizController::class, 'details']);
+Route::prefix('quiz')->group(function () {
+    Route::get('/{id}', [QuizController::class, 'details']);
+    Route::get('/take/{quiz_id}', [QuizController::class, 'take']);
+    Route::post('/{quiz_id}', [QuizController::class, 'storeAnswer']);
+});

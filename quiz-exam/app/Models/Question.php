@@ -16,6 +16,11 @@ class Question extends Model
         return $this->belongsTo(Quiz::class);
     }
 
+    public function options()
+    {
+        return $this->hasMany(OptionItem::class);
+    }
+
     public function matches()
     {
         return $this->hasMany(MatchItem::class);

@@ -22,6 +22,14 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', [HomeController::class, 'index'])->name('index');
+
+
+Route::get('/user/details', [HomeController::class, 'user'])->name('user.details');
+Route::redirect('/user/', '/user/details');
+
+Route::post('/user/update', [HomeController::class, 'update'])->name('user.update');
+Route::post('/user/updatePassword', [HomeController::class, 'updatePassword'])->name('user.update.password');
+
 Route::get('/register', [RegisterController::class, 'registerForm']);
 Route::post('/register', [RegisterController::class, 'register'])->name('register');
 

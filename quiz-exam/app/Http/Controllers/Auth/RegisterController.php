@@ -13,7 +13,7 @@ class RegisterController extends Controller
 {
     public function registerForm()
     {
-        return view('register');
+        return view('auth/register');
     }
 
     public function register(Request $request)
@@ -35,7 +35,7 @@ class RegisterController extends Controller
 
     public function loginForm()
     {
-        return view('login');
+        return view('auth/login');
     }
 
     public function login(Request $request)

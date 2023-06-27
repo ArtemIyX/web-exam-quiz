@@ -8,7 +8,9 @@
 </head>
 <body>
     <div class="header">
+        <a href="{{route('index')}}">Home</a>
         @auth
+            <a href="{{route('user.details')}}">Profile</a>
             <a href="{{ route('logout') }}">Logout</a>
         @else
             <a href="{{ route('register') }}">Register</a>

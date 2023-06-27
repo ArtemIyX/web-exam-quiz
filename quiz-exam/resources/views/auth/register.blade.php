@@ -1,3 +1,7 @@
+@extends('layout')
+@section('title', 'Sign up')
+
+@section('content')
 <form method="POST" action="{{ route('register') }}" accept-charset="UTF-8">
     @csrf
 
@@ -34,3 +38,4 @@
         <button type="submit">Register</button>
     </div>
 </for
+@endsection

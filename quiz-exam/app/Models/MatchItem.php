@@ -9,10 +9,16 @@ class MatchItem extends Model
 {
     use HasFactory;
     protected $table = 'matches';
-    protected $fillable = ['question_id', 'left_item', 'right_item'];
+    protected $fillable = ['question_id', 'left_item', 'is_right', 'parent_id'];
 
     public function question()
     {
         return $this->belongsTo(Question::class);
     }
+
+    public function parent()
+    {
+        return $this->belongsTo(MatchItem::class, 'parent_id');
+    }
+
 }

@@ -1,6 +1,6 @@
 async function loadQuestions(quizId) {
     try {
-        const response = await fetch(`/api/quiz/${quizId}`);
+        const response = await fetch(`/api/questions/${quizId}`);
         const data = await response.json();
         if (response.ok && data.retCode === 0) {
             return data.result;
@@ -14,12 +14,25 @@ async function loadQuestions(quizId) {
         // Handle the exception appropriately
     }
 }
-async function loadAnswers(questionId) {
+async function loadOptions(questionId) {
     try {
-        const response = await fetch(`/api/question/${questionId}`);
+        const response = await fetch(`/api/options/${questionId}`);
         const data = await response.json();
-        console.log("Answers: ");
-        console.log(data.result);
+        // console.log("Answers: ");
+        // console.log(data.result);
+        if (response.ok) {
+            return data.result;
+        } else {
+            throw new Error(data.retMsg);
+        }
+    } catch (error) {
+        throw new Error('Failed to load answers');
+    }
+}
+async function loadMatches(questionId) {
+    try {
+        const response = await fetch(`/api/matches/${questionId}`);
+        const data = await response.json();
         if (response.ok) {
             return data.result;
         } else {
@@ -47,6 +60,25 @@ async function renderAnswers(optionsContainer, options) {
         optionsContainer.appendChild(radioDiv);
     });
 }
+async function renderMatches(macthesContainer, matches) {
+    for (const name of matches.left) {
+        const div = document.createElement('div');
+        const nameParagraph = document.createElement('p')
+        nameParagraph.textContent = name.item;
+        const select = document.createElement('select');
+        select.name = name.id;
+        for (const option of matches.right) {
+            const optionElement = document.createElement('option');
+            optionElement.value = option.id;
+            optionElement.textContent = option.item;
+            select.appendChild(optionElement);
+        }
+        div.appendChild(nameParagraph);
+        div.appendChild(select);
+
+        macthesContainer.appendChild(div);
+    }
+}
 
 async function renderQuestions(questions) {
     const container = document.getElementById('questions-container');
@@ -61,8 +93,14 @@ async function renderQuestions(questions) {
         questionText.textContent = question.question;
         questionDiv.appendChild(questionText);
 
-        const answers = await loadAnswers(questions[i].id);
-        await renderAnswers(questionDiv, answers);
+        if (questions[i].question_type === "Option") {
+            const options = await loadOptions(questions[i].id);
+            await renderAnswers(questionDiv, options);
+        }
+        else if (questions[i].question_type == "Match") {
+            const matches = await loadMatches(questions[i].id);
+            await renderMatches(questionDiv, matches)
+        }
 
         container.appendChild(questionDiv);
     }

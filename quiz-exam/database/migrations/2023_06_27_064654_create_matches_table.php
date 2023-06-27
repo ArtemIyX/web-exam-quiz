@@ -16,8 +16,10 @@ return new class extends Migration
         Schema::create('matches', function (Blueprint $table) {
             $table->id();
             $table->foreignId('question_id')->constrained('questions');
-            $table->string('left_item');
-            $table->string('right_item');
+            $table->string('item');
+            $table->boolean('is_right')->default(false);
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->foreign('parent_id')->references('id')->on('matches')->onDelete('cascade');
             $table->timestamps();
         });
     }

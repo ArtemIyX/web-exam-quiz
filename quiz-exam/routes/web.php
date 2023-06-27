@@ -35,13 +35,14 @@ Route::get('/logout', [RegisterController::class, 'logout'])->name('logout');
 
 Route::prefix('api')->group(function() {
     Route::get('/quizzes', [QuizController::class, 'index']);
-    Route::get('/quiz/{id}', [QuizController::class, 'questions']);
-    Route::get('/question/{id}', [QuizController::class, 'options']);
+    Route::get('/questions/{quiz_id}', [QuizController::class, 'questions']);
+    Route::get('/options/{quiz_id}', [QuizController::class, 'options']);
+    Route::get('/matches/{quiz_id}', [QuizController::class, 'matches']);
     Route::get('/users/{id}', [UserController::class, 'getUserNameById']);
 });
 
 Route::prefix('quiz')->group(function () {
-    Route::get('/{id}', [QuizController::class, 'details']);
+    Route::get('/{quiz_id}', [QuizController::class, 'details']);
     Route::get('/take/{quiz_id}', [QuizController::class, 'take']);
     Route::post('/{quiz_id}', [QuizController::class, 'storeAnswer']);
 });

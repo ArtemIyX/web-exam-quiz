@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -30,5 +31,28 @@ class RegisterController extends Controller
         $user->save();
 
         return redirect('/')->with('success', true);
+    }
+
+    public function loginForm()
+    {
+        return view('login');
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            // Authentication successful
+            return redirect()->intended('/');
+        } else {
+            // Authentication failed
+            return redirect()->back()->withInput()->withErrors([
+                'email' => 'Invalid email or password',
+            ]);
+        }
     }
 }

@@ -12,7 +12,7 @@
         let res = await loadQuestions({{$quiz_id}});
         renderQuestions(res);
     }
-    load();
+
 
     async function finishClick() {
         const questionOptions = await grabAllOptionsQuestions();
@@ -40,10 +40,15 @@
             console.error(error);
         }
     }
-    // Get a reference to the button element
-    const button = document.getElementById('sendButton');
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get a reference to the button element
+        const button = document.getElementById('sendButton');
 
-    // Bind the click event to the button and associate it with the buttonClick function
-    button.addEventListener('click', finishClick);
+        // Bind the click event to the button and associate it with the buttonClick function
+        button.addEventListener('click', finishClick);
+
+        load();
+    });
+
 </script>
 @endsection

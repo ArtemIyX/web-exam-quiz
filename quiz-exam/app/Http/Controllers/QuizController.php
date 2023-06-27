@@ -232,6 +232,9 @@ class QuizController extends Controller
             $submission->matches()->saveMany($submission_matches);
 
             $submission->save();
+
+            $quiz->times_passed++;
+            $quiz->save();
             return response()->json([
                 'retCode' => Response::HTTP_OK,
                 'retMsg' => 'OK',
@@ -292,7 +295,6 @@ class QuizController extends Controller
             }
             else if($question->question_type == 'Match') {
 
-
                 $right_matches = $question->matches()->where('is_right', true)->get();
                 $left_matches = $question->matches()->where('is_right', false)->get();
 
@@ -340,7 +342,8 @@ class QuizController extends Controller
         }
 
         $subDetails = (object) [
-            'submission:' => $sub,
+            'submission' => $sub,
+            'submitter' => $sub->user,
             'answers' => (object) [
                 'options' => $sub->options,
                 'matches' => $sub->matches

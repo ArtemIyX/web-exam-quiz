@@ -186,19 +186,3 @@ async function grabAllMatchesQuestions() {
     }
     return result;
 }
-
-async function loadResults(sub_id) {
-    try {
-        const response = await fetch(`/api/options/${questionId}`);
-        const data = await response.json();
-        // console.log("Answers: ");
-        // console.log(data.result);
-        if (response.ok && data.retCode === 200) {
-            return data.result;
-        } else {
-            throw new Error(data.retMsg);
-        }
-    } catch (error) {
-        throw new Error('Failed to load answers');
-    }
-}

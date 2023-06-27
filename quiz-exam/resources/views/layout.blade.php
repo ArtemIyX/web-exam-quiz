@@ -8,7 +8,12 @@
 </head>
 <body>
     <div class="header">
-        <span>Same Header</span>
+        @auth
+            <a href="{{ route('logout') }}">Logout</a>
+        @else
+            <a href="{{ route('register') }}">Register</a>
+            <a href="{{ route('login') }}">Login</a>
+        @endauth
     </div>
 
     <div class="content">

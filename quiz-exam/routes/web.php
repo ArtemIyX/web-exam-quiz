@@ -28,5 +28,7 @@ Route::post('/register', [RegisterController::class, 'register'])->name('registe
 Route::get('/login', [RegisterController::class, 'loginForm']);
 Route::post('/login', [RegisterController::class, 'login'])->name('login');
 
+Route::get('/logout', [RegisterController::class, 'logout'])->name('logout');
+
 Route::get('/api/quizzes', [QuizController::class, 'index']);
 Route::get('/api/users/{id}', [UserController::class, 'getUserNameById']);

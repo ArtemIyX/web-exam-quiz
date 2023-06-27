@@ -3,7 +3,5 @@
 
 @section('content')
     <h1>Welcome to Quiz-Exam</h1>
-    <div class="search-bar">
-
-    </div>
+    <p>Success value: {{ session('success') }}</p>
 @endsection

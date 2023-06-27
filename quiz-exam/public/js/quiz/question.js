@@ -2,7 +2,7 @@ async function loadQuestions(quizId) {
     try {
         const response = await fetch(`/api/questions/${quizId}`);
         const data = await response.json();
-        if (response.ok && data.retCode === 0) {
+        if (response.ok && data.retCode === 200) {
             return data.result;
         } else {
             // Error occurred during data retrieval
@@ -20,7 +20,7 @@ async function loadOptions(questionId) {
         const data = await response.json();
         // console.log("Answers: ");
         // console.log(data.result);
-        if (response.ok) {
+        if (response.ok && data.retCode === 200) {
             return data.result;
         } else {
             throw new Error(data.retMsg);
@@ -33,7 +33,7 @@ async function loadMatches(questionId) {
     try {
         const response = await fetch(`/api/matches/${questionId}`);
         const data = await response.json();
-        if (response.ok) {
+        if (response.ok && data.retCode === 200) {
             return data.result;
         } else {
             throw new Error(data.retMsg);

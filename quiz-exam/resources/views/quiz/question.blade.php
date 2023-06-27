@@ -24,8 +24,22 @@
             matches: matchesOptions,
         };
         console.log(payload);
+        const csrfToken = "{{ csrf_token() }}";
+        const response = await fetch('/quiz/store', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify(payload),
+        });
+        try {
+            console.log(await response.json());
+        }
+        catch(error) {
+            console.error(error);
+        }
     }
-
     // Get a reference to the button element
     const button = document.getElementById('sendButton');
 

@@ -33,12 +33,13 @@ Route::prefix('api')->group(function() {
     Route::get('/users/{id}', [UserController::class, 'getUserNameById']);
 });
 
+Route::prefix('quiz')->group(function () {
+    Route::get('/{quiz_id}', [QuizController::class, 'details']);
+    Route::get('/take/{quiz_id}', [QuizController::class, 'take']);
+    Route::post('/store', [QuizController::class, 'storeAnswer']);
+});
+
 Route::middleware(['auth'])->group(function () {
-    Route::prefix('quiz')->group(function () {
-        Route::get('/{quiz_id}', [QuizController::class, 'details']);
-        Route::get('/take/{quiz_id}', [QuizController::class, 'take']);
-        Route::post('/{quiz_id}', [QuizController::class, 'storeAnswer']);
-    });
 
     Route::get('/logout', [RegisterController::class, 'logout'])->name('logout');
 

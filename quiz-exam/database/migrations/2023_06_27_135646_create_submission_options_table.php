@@ -22,7 +22,7 @@ return new class extends Migration
             // Foreign key constraints
             $table->foreign('submission_id')->references('id')->on('submissions')->onDelete('cascade');
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
-            $table->foreign('option_id')->references('id')->on('options')->onDelete('cascade');
+            $table->foreign('option_id')->nullable()->references('id')->on('options')->onDelete('cascade');
 
             $table->timestamps();
         });

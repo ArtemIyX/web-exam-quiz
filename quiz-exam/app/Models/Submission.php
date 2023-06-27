@@ -26,11 +26,11 @@ class Submission extends Model
 
     public function options()
     {
-        return $this->hasMany(Option::class);
+        return $this->hasMany(SubmissionOption::class);
     }
 
     public function matches()
     {
-        return $this->hasMany(MatchItem::class);
+        return $this->hasMany(SubmissionMatch::class);
     }
 }

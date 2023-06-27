@@ -10,7 +10,7 @@ class QuizController extends Controller
 {
     public function index(QuizService $quizService)
     {
-        $quizzes = $quizService->getAllQuizzes();
+        $quizzes = $quizService->getAllQuizzes(20);
 
         return response()->json([
             'retCode' => 0,

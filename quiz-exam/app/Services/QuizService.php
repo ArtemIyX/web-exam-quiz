@@ -5,10 +5,13 @@ use App\Models\Quiz;
 
 class QuizService
 {
-    public function getAllQuizzes()
+    public function getAllQuizzes($amount)
     {
-        return Quiz::all();
+        $quizzes = Quiz::all();
+        $limitedQuizzes = $quizzes->take($amount);
+        return $limitedQuizzes;
     }
+
     public function getQuizById($quizId)
     {
         return Quiz::findOrFail($quizId);

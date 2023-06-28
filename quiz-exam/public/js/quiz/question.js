@@ -93,9 +93,15 @@ async function renderQuestions(questions) {
         questionDiv.classList.add(`question_${questions[i].question_type}`);
         questionDiv.setAttribute('question_id', questions[i].id);
         const questionText = document.createElement('p');
+        questionText.classList.add('text-question');
         const questionPoints = document.createElement('p');
-        const hr = document.createElement('hr');
-        questionPoints.textContent = `Points: ${questions[i].points}`;
+        questionPoints.classList.add('text-points')
+        const pointsValueSpan = document.createElement('span');
+        pointsValueSpan.classList.add('points-value')
+        //const hr = document.createElement('hr');
+        questionPoints.textContent = `Points:`;
+        questionPoints.appendChild(pointsValueSpan);
+        pointsValueSpan.textContent = `${questions[i].points}`;
         questionText.textContent = question.question;
         questionDiv.appendChild(questionText);
         questionDiv.appendChild(questionPoints);
@@ -116,7 +122,7 @@ async function renderQuestions(questions) {
                 return renderMatches(questionDiv, matches);
             }));
         }
-        questionDiv.appendChild(hr);
+        //questionDiv.appendChild(hr);
         // Append the question div to the container
         container.appendChild(questionDiv);
     }

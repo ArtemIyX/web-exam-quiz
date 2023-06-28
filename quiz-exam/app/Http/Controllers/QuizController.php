@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Message;
+
 class QuizController extends Controller
 {
     public function index()
@@ -29,7 +30,14 @@ class QuizController extends Controller
         ]);
     }
 
-    public function get($quiz_id) {
+    public function create()
+    {
+        $u = Auth::user();
+        return view('quiz/create', ['user' => $u]);
+    }
+
+    public function get($quiz_id)
+    {
         try {
             $quiz = Quiz::findOrFail($quiz_id);
 
@@ -38,8 +46,7 @@ class QuizController extends Controller
                 'retMsg' => 'OK',
                 'result' => $quiz
             ]);
-        }
-        catch(ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return response()->json([
                 'retCode' => Response::HTTP_NOT_FOUND,
                 'retMsg' => 'NOT FOUND',
@@ -138,7 +145,8 @@ class QuizController extends Controller
         return view('quiz/question', ['quiz_id' => $quiz_id], ['user_id' => $u->id]);
     }
 
-    protected function getQuiz($jsonData) : Quiz | null {
+    protected function getQuiz($jsonData): Quiz|null
+    {
         $quiz_need_id = $jsonData['quiz_id'];
         try {
             return Quiz::findOrFail($quiz_need_id);
@@ -147,8 +155,9 @@ class QuizController extends Controller
         }
     }
 
-    protected function grabOptionAnswers($quiz, $submission, $answers_options, &$submission_options) : bool {
-        for($i = 0; $i < count($answers_options); ++$i) {
+    protected function grabOptionAnswers($quiz, $submission, $answers_options, &$submission_options): bool
+    {
+        for ($i = 0; $i < count($answers_options); ++$i) {
             $current_answer = $answers_options[$i];
             $q_id = $current_answer['question_id'];
             $selected_id = $current_answer['selected_id'];
@@ -159,22 +168,22 @@ class QuizController extends Controller
                 $submissionOption->option_id = $selected_id;
 
                 array_push($submission_options, $submissionOption);
-            }
-            else {
+            } else {
                 return false;
             }
         }
         return true;
     }
 
-    protected function grabMatchAnswers($quiz, $submission, $answers_matches, &$submission_matches) : bool {
-        for($i = 0; $i < count($answers_matches); ++$i) {
+    protected function grabMatchAnswers($quiz, $submission, $answers_matches, &$submission_matches): bool
+    {
+        for ($i = 0; $i < count($answers_matches); ++$i) {
             $current_answer = $answers_matches[$i];
             $q_id = $current_answer['question_id'];
             $left_id = $current_answer['left_id'];
             $right_id = $current_answer['right_id'];
 
-            if($quiz->questions->contains('id', $q_id)) {
+            if ($quiz->questions->contains('id', $q_id)) {
                 $submissionMatch = new SubmissionMatch();
                 $submissionMatch->submission_id = $submission->id;
                 $submissionMatch->question_id = $q_id;
@@ -182,8 +191,7 @@ class QuizController extends Controller
                 $submissionMatch->right_match_id = $right_id;
 
                 array_push($submission_matches, $submissionMatch);
-            }
-            else {
+            } else {
                 return false;
             }
         }
@@ -203,7 +211,7 @@ class QuizController extends Controller
                 ]);
             }
             $quiz = $this->getQuiz($jsonData);
-            if($quiz == null) {
+            if ($quiz == null) {
                 return response()->json([
                     'retCode' => Response::HTTP_NOT_FOUND,
                     'retMsg' => 'Quiz {$quiz_need_id} - NOT FOUND',
@@ -220,10 +228,9 @@ class QuizController extends Controller
             $answers_options = $request['options'];
 
             $submission_options = [];
-            if($this->grabOptionAnswers($quiz, $submission, $answers_options, $submission_options)) {
+            if ($this->grabOptionAnswers($quiz, $submission, $answers_options, $submission_options)) {
                 // all is fine
-            }
-            else {
+            } else {
                 $submission->delete();
                 return response()->json([
                     'retCode' => Response::HTTP_BAD_REQUEST,
@@ -238,10 +245,9 @@ class QuizController extends Controller
             $answers_matches = $request['matches'];
             $submission_matches = [];
 
-            if($this->grabMatchAnswers($quiz, $submission, $answers_matches, $submission_matches)) {
+            if ($this->grabMatchAnswers($quiz, $submission, $answers_matches, $submission_matches)) {
                 // All is fine
-            }
-            else {
+            } else {
                 $submission->delete();
                 return response()->json([
                     'retCode' => Response::HTTP_BAD_REQUEST,
@@ -260,8 +266,7 @@ class QuizController extends Controller
                 'retMsg' => 'OK',
                 'result' => $submission->id
             ]);
-        }
-        catch(Exception $ex) {
+        } catch (Exception $ex) {
             return response()->json([
                 'retCode' => Response::HTTP_BAD_REQUEST,
                 'retMsg' => $ex->getMessage(),
@@ -269,13 +274,14 @@ class QuizController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
     }
-    protected function getResultInfo($sub_id){
+    protected function getResultInfo($sub_id)
+    {
         $sub = Submission::findOrFail($sub_id);
         $quiz = $sub->quiz;
         $questions = $quiz->questions;
 
         $max_point = 0.0;
-        for($i = 0; $i < count($questions); ++$i) {
+        for ($i = 0; $i < count($questions); ++$i) {
             $max_point += $questions[$i]->points;
         }
 
@@ -284,26 +290,25 @@ class QuizController extends Controller
         $option_correct = [];
         $matches_correct = [];
 
-        foreach($questions as $question) {
-            if($question->question_type == 'Option') {
+        foreach ($questions as $question) {
+            if ($question->question_type == 'Option') {
                 $correctOption = $question->options()->firstWhere('is_correct', true);
                 $selectedOption = $sub->options()->firstWhere('question_id', $question->id);
-                if(!$selectedOption) {
-                    array_push($option_correct, (object)[
+                if (!$selectedOption) {
+                    array_push($option_correct, (object) [
                         'question_id' => $question->id,
                         'selected_option_id' => null,
                         'correct_option_id' => $correctOption->id,
                         'correct' => false,
                         'points' => 0.0
                     ]);
-                }
-                else {
+                } else {
                     $correct = $correctOption->id == $selectedOption->option_id;
                     $points = floatval($question->points);
-                    if(!$correct) {
+                    if (!$correct) {
                         $points = 0.0;
                     }
-                    array_push($option_correct, (object)[
+                    array_push($option_correct, (object) [
                         'question_id' => $question->id,
                         'selected_option_id' => $selectedOption->option_id,
                         'correct_option_id' => $correctOption->id,
@@ -312,8 +317,7 @@ class QuizController extends Controller
                     ]);
                     $real_point += $points;
                 }
-            }
-            else if($question->question_type == 'Match') {
+            } else if ($question->question_type == 'Match') {
 
                 $right_matches = $question->matches()->where('is_right', true)->get();
                 $left_matches = $question->matches()->where('is_right', false)->get();
@@ -321,7 +325,7 @@ class QuizController extends Controller
                 $point_per_match = floatval($question->points) / $question->matches()->where('is_right', false)->count();
 
                 // For each left match in this question
-                foreach($left_matches as $left_match) {
+                foreach ($left_matches as $left_match) {
 
                     // Get correct right match for this left
                     $correct_right_match = $right_matches->firstWhere('parent_id', $left_match->id);
@@ -330,24 +334,23 @@ class QuizController extends Controller
                     $user_left_match = $sub->matches()->firstWhere('left_match_id', $left_match->id);
 
                     // If user didnt select (wtf?)
-                    if(!$user_left_match) {
-                        array_push($matches_correct, (object)[
-                                'question_id' => $question->id,
-                                'left_id' => $left_match->id,
-                                'selected_right_id' => null,
-                                'correct_right_id' => $correct_right_match->id,
-                                'correct' => false,
-                                'points' => 0.0
-                            ]);
-                    }
-                    else {
+                    if (!$user_left_match) {
+                        array_push($matches_correct, (object) [
+                            'question_id' => $question->id,
+                            'left_id' => $left_match->id,
+                            'selected_right_id' => null,
+                            'correct_right_id' => $correct_right_match->id,
+                            'correct' => false,
+                            'points' => 0.0
+                        ]);
+                    } else {
                         $correct = $user_left_match->right_match_id == $correct_right_match->id;
                         $points = $point_per_match;
-                        if(!$correct) {
+                        if (!$correct) {
                             $points = 0.0;
                         }
 
-                        array_push($matches_correct, (object)[
+                        array_push($matches_correct, (object) [
                             'question_id' => $question->id,
                             'left_id' => $left_match->id,
                             'selected_right_id' => $user_left_match->right_match_id,
@@ -382,7 +385,8 @@ class QuizController extends Controller
         ]);
     }
 
-    public function result($sub_id) {
+    public function result($sub_id)
+    {
         return view('quiz/result', ['sub_id' => $sub_id]);
     }
 }

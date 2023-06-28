@@ -43,7 +43,9 @@
 
     </div>
 </div>
+@endsection
 
+@scripts('scripts')
 <script src="{{ asset('js/quiz/question.js') }}"></script>
 <script src="{{ asset('js/quiz/results.js') }}"></script>
 <script src="{{ asset('js/loading.js') }}"></script>

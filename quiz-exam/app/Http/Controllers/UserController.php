@@ -32,7 +32,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function getUserNameById(Request $request, $id)
+    public function get(Request $request, $id)
     {
         $user = User::find($id);
 
@@ -49,7 +49,7 @@ class UserController extends Controller
         return response()->json([
             'retCode' => 0,
             'retMsg' => 'OK',
-            'result' => $user->name
+            'result' => $user
         ]);
     }
 

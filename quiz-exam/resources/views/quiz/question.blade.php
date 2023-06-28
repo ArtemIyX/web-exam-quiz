@@ -12,6 +12,10 @@
     <div id="questions-container"></div>
     <button id="sendButton">Finish</button>
 </div>
+
+@endsection
+
+@scripts('scripts')
 <script src="{{ asset('js/quiz/question.js') }}"></script>
 <script src="{{ asset('js/loading.js') }}"></script>
 <script>

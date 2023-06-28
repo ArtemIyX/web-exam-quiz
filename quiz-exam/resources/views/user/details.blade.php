@@ -82,13 +82,16 @@
         </form>
       </div>
 </div>
-    <script>
-        // Toggle Edit Form on Button Click
-        document.getElementById('editButton').addEventListener('click', function() {
-            document.getElementById('editDiv').style.display = 'block';
-        });
-        document.getElementById('passwordButton').addEventListener('click', function() {
-            document.getElementById('passwordDiv').style.display = 'block';
-        });
-    </script>
+@endsection
+
+@section('scripts')
+<script>
+    // Toggle Edit Form on Button Click
+    document.getElementById('editButton').addEventListener('click', function() {
+        document.getElementById('editDiv').style.display = 'block';
+    });
+    document.getElementById('passwordButton').addEventListener('click', function() {
+        document.getElementById('passwordDiv').style.display = 'block';
+    });
+</script>
 @endsection

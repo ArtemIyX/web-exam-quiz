@@ -9,15 +9,17 @@
 @section('content')
 <section class="home">
     <div class="hero-section">
-        <div class="total text"><i class='bx bxs-hot'></i>Total quizzes: 
+        <div class="total text"><i class='bx bxs-hot'></i>Total quizzes:
             <span class="number">20</span>
         </div>
     </div>
-
+    <div id="loading-div">
+        <p>
+            Loading quizzes...
+        </p>
+    </div>
     <div id="quizContainer">
-        <div class="quiz-grid">
-            
-        </div>
+
     </div>
 </section>
 @endsection

@@ -179,7 +179,6 @@ async function grabAllMatchesQuestions() {
         const q_id = matchesOptions[i].getAttribute('question_id');
         // Get all matches for this question
         const matchContainers = matchesOptions[i].querySelectorAll('.match-container');
-        console.log()
         for(let j = 0; j < matchContainers.length; ++j) {
             const select = matchContainers[j].querySelector('select');
             const data = {

@@ -6,4 +6,7 @@
 <div id="quizContainer"></div>
 
 <script src="{{asset('js/quiz/loadQuizzes.js')}}"></script>
+<script>
+    renderQuizzes();
+</script>
 @endsection

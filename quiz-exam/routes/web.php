@@ -27,17 +27,19 @@ Route::post('/login', [RegisterController::class, 'login'])->name('login');
 
 Route::prefix('api')->group(function() {
     Route::get('/quizzes', [QuizController::class, 'index']);
+    Route::get('/quiz/{quiz_id}', [QuizController::class, 'get']);
     Route::get('/result/{sub_id}', [QuizController::class, 'getResultInfo']);
     Route::get('/questions/{quiz_id}', [QuizController::class, 'questions']);
     Route::get('/options/{quiz_id}', [QuizController::class, 'options']);
     Route::get('/matches/{quiz_id}', [QuizController::class, 'matches']);
-    Route::get('/users/{id}', [UserController::class, 'getUserNameById']);
+    Route::get('/user/{id}', [UserController::class, 'getUserNameById']);
+    Route::get('/user/{id}/submissions', [UserController::class, 'getSubmissions']);
 });
 
 Route::prefix('quiz')->group(function () {
     Route::get('/take/{quiz_id}', [QuizController::class, 'take'])->middleware('auth');
     Route::post('/store', [QuizController::class, 'storeAnswer'])->middleware('auth');;
-    
+
     Route::get('/{quiz_id}', [QuizController::class, 'details']);
     Route::get('/result/{sub_id}', [QuizController::class, 'result']);
 });
@@ -47,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [RegisterController::class, 'logout'])->name('logout');
     Route::post('/user/update', [HomeController::class, 'update'])->name('user.update');
     Route::post('/user/updatePassword', [HomeController::class, 'updatePassword'])->name('user.update.password');
-    Route::get('/user/details', [HomeController::class, 'user'])->name('user.details');
+    Route::get('/user/details', [UserController::class, 'index'])->name('user.details');
+    Route::get('/user/sub', [UserController::class, 'submissions'])->name('user.sub');
     Route::redirect('/user/', '/user/details');
 });

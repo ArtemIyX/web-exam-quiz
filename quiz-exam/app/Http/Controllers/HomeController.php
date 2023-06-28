@@ -12,16 +12,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // Your code logic goes here
         return view('quiz/list');
-    }
-
-    public function user()
-    {
-        // Get the authenticated user
-        $user = Auth::user();
-
-        return view('user.details', ['user' => $user]);
     }
 
     public function update(Request $request)

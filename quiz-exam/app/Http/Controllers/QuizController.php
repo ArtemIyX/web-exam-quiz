@@ -29,6 +29,26 @@ class QuizController extends Controller
         ]);
     }
 
+    public function get($quiz_id) {
+        try {
+            $quiz = Quiz::findOrFail($quiz_id);
+
+            return response()->json([
+                'retCode' => Response::HTTP_OK,
+                'retMsg' => 'OK',
+                'result' => $quiz
+            ]);
+        }
+        catch(ModelNotFoundException $e) {
+            return response()->json([
+                'retCode' => Response::HTTP_NOT_FOUND,
+                'retMsg' => 'NOT FOUND',
+                'result' => null
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+    }
+
     public function questions($quiz_id)
     {
         try {

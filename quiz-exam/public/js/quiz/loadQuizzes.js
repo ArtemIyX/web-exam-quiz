@@ -1,11 +1,8 @@
 // Fetch quizzes asynchronously
 async function fetchQuizzes() {
     try {
-        const response = await fetch('api/quizzes');
+        const response = await fetch('/api/quizzes');
         const data = await response.json();
-
-        // Process the response data
-        console.log(data);
         return data.result;
     } catch (error) {
         // Handle any errors
@@ -14,9 +11,22 @@ async function fetchQuizzes() {
     }
 }
 
+async function getQuiz(id) {
+    try {
+        const response = await fetch(`/api/quiz/${id}`);
+        const data = await response.json();
+        return data.result;
+    }
+    catch(error) {
+         // Handle any errors
+         console.error('Error:', error);
+         return null;
+    }
+}
+
 async function fetchUserName(userId) {
     try {
-        const response = await fetch(`api/users/${userId}`);
+        const response = await fetch(`/api/user/${userId}`);
         const data = await response.json();
 
         if (data.retCode === 0) {
@@ -63,6 +73,3 @@ async function renderQuizzes() {
         console.error(error);
     }
 }
-
-// Invoke the function to load quizzes on page load
-renderQuizzes();

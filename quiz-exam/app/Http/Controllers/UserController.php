@@ -2,13 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Foundation\Auth\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+
+    public function index()
+    {
+        $user = Auth::user();
+        return view('user.details', ['user' => $user]);
+    }
+    public function submissions()
+    {
+        $user = Auth::user();
+        return view('user.submissions', ['user' => $user]);
+    }
+
+    public function getSubmissions(Request $request, $id) {
+        $user = User::find($id);
+
+        return response()->json([
+            'retCode' => 0,
+            'retMsg' => 'OK',
+            'result' =>$user->submissions
+        ]);
+    }
+
     public function getUserNameById(Request $request, $id)
     {
         $user = User::find($id);
@@ -29,4 +52,5 @@ class UserController extends Controller
             'result' => $user->name
         ]);
     }
+
 }

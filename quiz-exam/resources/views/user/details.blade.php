@@ -2,14 +2,23 @@
 @section('title', 'Dashboard')
 
 @section('content')
-    <!-- Show User Details -->
-    <h2>User Details</h2>
-    <p>Name: {{ $user->name }}</p>
-    <p>Email: {{ $user->email }}</p>
+<div>
 
-    <!-- Button to Show Edit Form -->
-    <button id="editButton">Edit</button>
-
+    <div>
+        <!-- Show User Details -->
+        <h2>User Details</h2>
+        <div>
+            <a href="{{route('user.sub')}}">Submissions</a>
+        </div>
+        <div>
+            <p>Name: {{ $user->name }}</p>
+            <p>Email: {{ $user->email }}</p>
+        </div>
+    </div>
+    <div>
+        <!-- Button to Show Edit Form -->
+        <button id="editButton">Edit</button>
+    </div>
     <!-- Edit User Div (Initially Hidden) -->
     <div id="editDiv" style="display: none;">
         <h2>Edit User Details</h2>
@@ -72,7 +81,7 @@
             </div>
         </form>
       </div>
-
+</div>
     <script>
         // Toggle Edit Form on Button Click
         document.getElementById('editButton').addEventListener('click', function() {

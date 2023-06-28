@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="{{asset('css/layout.css')}}">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
   
+    @if (View::hasSection('styles'))
+    @yield('styles')
+    @endif
+
     <title>@yield('title')</title>
 </head>
 <body>
@@ -110,7 +114,7 @@
             </div>
         @endif
 
-        <span>Same footer</span>
+        {{-- <span>Same footer</span> --}}
     </div>
 
     <script src="{{asset('js/layout.js')}}"></script>

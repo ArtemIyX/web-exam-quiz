@@ -27,6 +27,8 @@ Route::post('/login', [RegisterController::class, 'login'])->name('login');
 
 Route::prefix('api')->group(function() {
     Route::get('/quizzes', [QuizController::class, 'index']);
+    Route::get('/quiz/count', [QuizController::class, 'count']);
+    Route::post('/quiz/create', [QuizController::class, 'storeQuiz']);
     Route::get('/quiz/{quiz_id}', [QuizController::class, 'get']);
     Route::get('/result/{sub_id}', [QuizController::class, 'getResultInfo']);
     Route::get('/questions/{quiz_id}', [QuizController::class, 'questions']);
@@ -34,6 +36,7 @@ Route::prefix('api')->group(function() {
     Route::get('/matches/{quiz_id}', [QuizController::class, 'matches']);
     Route::get('/user/{id}', [UserController::class, 'get']);
     Route::get('/user/{id}/submissions', [UserController::class, 'getSubmissions']);
+
 });
 
 Route::prefix('quiz')->group(function () {

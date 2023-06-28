@@ -129,7 +129,6 @@
             async function loadLayoutInfo() {
                 const user = await getUser({{auth()->id()}});
                 applyUserData(user);
-                console.log("loading...");
             }
             loadLayoutInfo();
         </script>

@@ -38,3 +38,19 @@ async function getUser(userId) {
         console.error('Fetch Error:', error);
     }
 }
+
+async function getQuizCount() {
+    try {
+        const response = await fetch('api//quiz/count');
+        const data = await response.json();
+
+        if (data.retCode === 0) {
+            return data.result;
+        } else {
+            console.error('Error:', data.retMsg);
+            return null;
+        }
+    } catch (error) {
+        console.error('Fetch Error:', error);
+    }
+}

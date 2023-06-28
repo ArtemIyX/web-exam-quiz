@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MatchItem;
+use App\Models\OptionItem;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\Submission;
@@ -27,6 +29,16 @@ class QuizController extends Controller
             'retCode' => Response::HTTP_OK,
             'retMsg' => 'OK',
             'result' => $quizzes
+        ]);
+    }
+
+    public function count()
+    {
+        $result = Quiz::All()->count();
+        return response()->json([
+            'retCode' => Response::HTTP_OK,
+            'retMsg' => 'OK',
+            'result' => $result
         ]);
     }
 
@@ -276,117 +288,272 @@ class QuizController extends Controller
     }
     protected function getResultInfo($sub_id)
     {
-        $sub = Submission::findOrFail($sub_id);
-        $quiz = $sub->quiz;
-        $questions = $quiz->questions;
+        try {
+            $sub = Submission::findOrFail($sub_id);
+            $quiz = $sub->quiz;
+            $questions = $quiz->questions;
 
-        $max_point = 0.0;
-        for ($i = 0; $i < count($questions); ++$i) {
-            $max_point += $questions[$i]->points;
-        }
+            $max_point = 0.0;
+            for ($i = 0; $i < count($questions); ++$i) {
+                $max_point += $questions[$i]->points;
+            }
 
-        $real_point = 0.0;
+            $real_point = 0.0;
 
-        $option_correct = [];
-        $matches_correct = [];
+            $option_correct = [];
+            $matches_correct = [];
 
-        foreach ($questions as $question) {
-            if ($question->question_type == 'Option') {
-                $correctOption = $question->options()->firstWhere('is_correct', true);
-                $selectedOption = $sub->options()->firstWhere('question_id', $question->id);
-                if (!$selectedOption) {
-                    array_push($option_correct, (object) [
-                        'question_id' => $question->id,
-                        'selected_option_id' => null,
-                        'correct_option_id' => $correctOption->id,
-                        'correct' => false,
-                        'points' => 0.0
-                    ]);
-                } else {
-                    $correct = $correctOption->id == $selectedOption->option_id;
-                    $points = floatval($question->points);
-                    if (!$correct) {
-                        $points = 0.0;
-                    }
-                    array_push($option_correct, (object) [
-                        'question_id' => $question->id,
-                        'selected_option_id' => $selectedOption->option_id,
-                        'correct_option_id' => $correctOption->id,
-                        'correct' => $correct,
-                        'points' => $points
-                    ]);
-                    $real_point += $points;
-                }
-            } else if ($question->question_type == 'Match') {
-
-                $right_matches = $question->matches()->where('is_right', true)->get();
-                $left_matches = $question->matches()->where('is_right', false)->get();
-
-                $point_per_match = floatval($question->points) / $question->matches()->where('is_right', false)->count();
-
-                // For each left match in this question
-                foreach ($left_matches as $left_match) {
-
-                    // Get correct right match for this left
-                    $correct_right_match = $right_matches->firstWhere('parent_id', $left_match->id);
-
-                    // Get user right match
-                    $user_left_match = $sub->matches()->firstWhere('left_match_id', $left_match->id);
-
-                    // If user didnt select (wtf?)
-                    if (!$user_left_match) {
-                        array_push($matches_correct, (object) [
+            foreach ($questions as $question) {
+                if ($question->question_type == 'Option') {
+                    $correctOption = $question->options()->firstWhere('is_correct', true);
+                    $selectedOption = $sub->options()->firstWhere('question_id', $question->id);
+                    if (!$selectedOption) {
+                        array_push($option_correct, (object) [
                             'question_id' => $question->id,
-                            'left_id' => $left_match->id,
-                            'selected_right_id' => null,
-                            'correct_right_id' => $correct_right_match->id,
+                            'selected_option_id' => null,
+                            'correct_option_id' => $correctOption->id,
                             'correct' => false,
                             'points' => 0.0
                         ]);
                     } else {
-                        $correct = $user_left_match->right_match_id == $correct_right_match->id;
-                        $points = $point_per_match;
+                        $correct = $correctOption->id == $selectedOption->option_id;
+                        $points = floatval($question->points);
                         if (!$correct) {
                             $points = 0.0;
                         }
-
-                        array_push($matches_correct, (object) [
+                        array_push($option_correct, (object) [
                             'question_id' => $question->id,
-                            'left_id' => $left_match->id,
-                            'selected_right_id' => $user_left_match->right_match_id,
-                            'correct_right_id' => $correct_right_match->id,
+                            'selected_option_id' => $selectedOption->option_id,
+                            'correct_option_id' => $correctOption->id,
                             'correct' => $correct,
                             'points' => $points
                         ]);
                         $real_point += $points;
                     }
+                } else if ($question->question_type == 'Match') {
+
+                    $right_matches = $question->matches()->where('is_right', true)->get();
+                    $left_matches = $question->matches()->where('is_right', false)->get();
+
+                    $point_per_match = floatval($question->points) / $question->matches()->where('is_right', false)->count();
+
+                    // For each left match in this question
+                    foreach ($left_matches as $left_match) {
+
+                        // Get correct right match for this left
+                        $correct_right_match = $right_matches->firstWhere('parent_id', $left_match->id);
+
+                        // Get user right match
+                        $user_left_match = $sub->matches()->firstWhere('left_match_id', $left_match->id);
+
+                        // If user didnt select (wtf?)
+                        if (!$user_left_match) {
+                            array_push($matches_correct, (object) [
+                                'question_id' => $question->id,
+                                'left_id' => $left_match->id,
+                                'selected_right_id' => null,
+                                'correct_right_id' => $correct_right_match->id,
+                                'correct' => false,
+                                'points' => 0.0
+                            ]);
+                        } else {
+                            $correct = $user_left_match->right_match_id == $correct_right_match->id;
+                            $points = $point_per_match;
+                            if (!$correct) {
+                                $points = 0.0;
+                            }
+
+                            array_push($matches_correct, (object) [
+                                'question_id' => $question->id,
+                                'left_id' => $left_match->id,
+                                'selected_right_id' => $user_left_match->right_match_id,
+                                'correct_right_id' => $correct_right_match->id,
+                                'correct' => $correct,
+                                'points' => $points
+                            ]);
+                            $real_point += $points;
+                        }
+                    }
                 }
             }
-        }
 
-        $subDetails = (object) [
-            'submission' => $sub,
-            'submitter' => $sub->user,
-            'answers' => (object) [
-                'options' => $sub->options,
-                'matches' => $sub->matches
-            ],
-            'total' => (object) [
-                'max_point' => $max_point,
-                'points' => $real_point,
-                'correct_options' => $option_correct,
-                'correct_matches' => $matches_correct
-            ]
-        ];
-        return response()->json([
-            'retCode' => Response::HTTP_OK,
-            'retMsg' => 'OK',
-            'result' => $subDetails
-        ]);
+            $subDetails = (object) [
+                'submission' => $sub,
+                'submitter' => $sub->user,
+                'answers' => (object) [
+                    'options' => $sub->options,
+                    'matches' => $sub->matches
+                ],
+                'total' => (object) [
+                    'max_point' => $max_point,
+                    'points' => $real_point,
+                    'correct_options' => $option_correct,
+                    'correct_matches' => $matches_correct
+                ]
+            ];
+            return response()->json([
+                'retCode' => Response::HTTP_OK,
+                'retMsg' => 'OK',
+                'result' => $subDetails
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'retCode' => Response::HTTP_BAD_REQUEST,
+                'retMsg' => $e->getMessage(),
+                'result' => null
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     public function result($sub_id)
     {
         return view('quiz/result', ['sub_id' => $sub_id]);
+    }
+
+    protected function checkStoreQuizInpit($jsonData)
+    {
+        if (empty($jsonData['name'])) {
+            throw new Exception("Quiz must have name");
+        }
+
+        if (empty($jsonData['description'])) {
+            throw new Exception("Quiz must have description");
+        }
+
+        if (!isset($jsonData['questions'])) {
+            throw new Exception("Quiz must have questions");
+        }
+
+        if (!is_array($jsonData['questions'])) {
+            throw new Exception("Quiz must have questions (array)");
+        }
+
+        $questionCount = count($jsonData['questions']);
+        if ($questionCount <= 0) {
+            throw new Exception("Quiz must have 'questions' (non-zero count)");
+        }
+
+        foreach ($jsonData['questions'] as $element) {
+            if (empty($element['title'])) {
+                throw new Exception("Question must have 'title'");
+            }
+            if (empty($element['type'])) {
+                throw new Exception("Question must have 'type'");
+            }
+            if (!($element['type'] == "radio" || $element['type'] == "dropdown")) {
+                throw new Exception("Question type must be 'radio' or 'dropdown'");
+            }
+
+
+            $options = $element['options'];
+            $optionCount = count($options);
+            if ($optionCount <= 1) {
+                throw new Exception("Question options count must be greater than 1");
+            }
+
+            $correctOptionCount = 0;
+
+            foreach ($options as $option) {
+                if ($element['type'] == "radio") {
+                    if (empty($option['answer'])) {
+                        throw new Exception("Question option title must not be empty");
+                    }
+                    if ($option['correct']) {
+                        $correctOptionCount++;
+                    }
+                } else if ($element['type'] == "dropdown") {
+                    if (count($option['answers']) == 0) {
+                        throw new Exception("Dropdown question must have");
+                    }
+                    $correctOptionCount = 0;
+                    foreach ($option['answers'] as $answer) {
+                        if ($answer['correct']) {
+                            $correctOptionCount++;
+                        }
+                    }
+                    if ($correctOptionCount != 1) {
+                        throw new Exception("For dropdown question each option must have only 1 correct answer");
+                    }
+                    $correctOptionCount = 0;
+                }
+            }
+            if ($element['type'] == "radio") {
+                if ($correctOptionCount != 1) {
+                    throw new Exception("Question must have only 1 correct answer (radio)");
+                }
+            } else if ($element['type'] == "dropdown") {
+                //nothing
+            }
+        }
+    }
+
+    public function storeQuiz(Request $request)
+    {
+        try {
+            $jsonData = $request->json()->all();
+            $user = Auth::user();
+            $this->checkStoreQuizInpit($jsonData);
+
+            $quiz = new Quiz();
+            $quiz->author_id = $user->id;
+            $quiz->times_passed = 0;
+            $quiz->title = $jsonData['name'];
+            $quiz->description = $jsonData['description'];
+            $quiz->save();
+            //$questions = [];
+
+            foreach($jsonData['questions'] as $q) {
+                $question = new Question();
+                $question->quiz_id =$quiz->id;
+                $question->question = $q['title'];
+                $question->question_type = 'Option';
+                $question->save();
+                if($q['type'] == 'radio') {
+                    $question->question_type = 'Option';
+                    //$options = [];
+                    foreach($q['options'] as $o) {
+                        $item = new OptionItem();
+                        $item->question_id = $question->id;
+                        $item->option = $o['answer'];
+                        $item->is_correct = $o['correct'];
+                        $item->save();
+                    }
+                }
+                else {
+                    $question->question_type = 'Match';
+                    foreach($q['options'] as $o) {
+                        $item = new MatchItem();
+                        $item->question_id = $question->id;
+                        $item->item = $o['title'];
+                        $item->is_right = false;
+                        foreach($o['answers'] as $a) {
+                            $i = new MatchItem();
+                            $i->question_id = $question->id;
+                            $i->item = $a['answer'];
+                            $i->is_right = true;
+                            if($a['correct']) {
+                                $i->parent_id = $item->id;
+                            }
+                            $i->save();
+                        }
+                        $item->save();
+                    }
+                }
+                $question->save();
+            }
+            $quiz->save();
+
+            return response()->json([
+                'retCode' => Response::HTTP_OK,
+                'retMsg' => 'OK',
+                'result' => $quiz
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'retCode' => Response::HTTP_BAD_REQUEST,
+                'retMsg' => $e->getMessage(),
+                'result' => null
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 }

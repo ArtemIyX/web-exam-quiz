@@ -27,6 +27,7 @@ Route::post('/login', [RegisterController::class, 'login'])->name('login');
 
 Route::prefix('api')->group(function() {
     Route::get('/quizzes', [QuizController::class, 'index']);
+    Route::get('/quiz/count', [QuizController::class, 'count']);
     Route::get('/quiz/{quiz_id}', [QuizController::class, 'get']);
     Route::get('/result/{sub_id}', [QuizController::class, 'getResultInfo']);
     Route::get('/questions/{quiz_id}', [QuizController::class, 'questions']);

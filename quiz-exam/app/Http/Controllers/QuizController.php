@@ -30,6 +30,15 @@ class QuizController extends Controller
         ]);
     }
 
+    public function count() {
+        $result = Quiz::All()->count();
+        return response()->json([
+            'retCode' => Response::HTTP_OK,
+            'retMsg' => 'OK',
+            'result' => $result
+        ]);
+    }
+
     public function create()
     {
         $u = Auth::user();

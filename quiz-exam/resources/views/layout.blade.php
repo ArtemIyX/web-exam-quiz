@@ -40,15 +40,15 @@
                 </li>
 
                 <ul class="menu-links">
-                    <li class="nav-link">
+                    {{-- <li class="nav-link">
                         <a href="#">
                             <i class='bx bx-list-ul icon' ></i>
                             <span class="text nav-text">Categories</span>
                         </a>
-                    </li>
+                    </li> --}}
 
                     <li class="nav-link">
-                        <a href="#">
+                        <a href="{{route('index')}}">
                             <i class='bx bx-question-mark icon' ></i>
                             <span class="text nav-text">Quizzes</span>
                         </a>
@@ -56,7 +56,7 @@
 
                     <li class="nav-link">
                         @auth
-                            <a href="#">
+                            <a href="{{route('index')}}">
                                 <i class='bx bx-bookmark icon'></i>
                                 <span class="text nav-text">Favorites</span>
                             </a>

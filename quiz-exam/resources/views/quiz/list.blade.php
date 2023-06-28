@@ -4,8 +4,13 @@
 
 @section('content')
     <section class="home">
-        <h1>Quiz List</h1>
-        <div id="quizContainer"></div>
+        <div class="hero-section">
+            <h1 class="text">Check the new <i class='bx bxs-hot'></i> quiz!</h1>
+
+        </div>
+        <div id="quizContainer">
+            
+        </div>
     </section>
 
 <script src="{{asset('js/quiz/loadQuizzes.js')}}"></script>

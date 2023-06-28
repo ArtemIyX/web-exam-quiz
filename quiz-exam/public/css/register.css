@@ -23,28 +23,6 @@
     padding: 40px
 }
 
-.wrapper .form-box.login{
-    transition: transform .18s ease;
-    transform: translateX(0);
-}
-
-.wrapper.active .form-box.login{
-    transition: none;
-    transform: translateX(-450px);
-}
-
-.wrapper .form-box.register{
-    position: absolute;
-    transition: none;
-    transform: translateX(450px);
-    
-}
-
-.wrapper.active .form-box.register{
-    transition: transform .18s ease;
-    transform: translateX(0);
-}
-
 .form-box h2{
     font-size: 30px;
     color: var(--login-color);

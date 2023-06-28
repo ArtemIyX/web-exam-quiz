@@ -52,16 +52,17 @@
 
 .quiz-grid .author,
 .quiz-grid .created-at{
+    position: absolute;
     font-size: 13px;
     font-weight: 300;
     color: rgba(0, 0, 0, 0.5);
-    float: left;
-    margin-right: 10px;
-    margin-top: 25px;
     bottom: 0;
+    margin-right: 10px;
+    margin-bottom: 25px;
+    
 }
 .quiz-grid .created-at{
-    float: right;
+    right: 13%;
 }
 
 .quiz-grid .btn-check{

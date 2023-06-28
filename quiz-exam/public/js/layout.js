@@ -15,10 +15,11 @@ searchBtn.addEventListener("click" , () =>{
 });
 
 const btnPopup = document.querySelector('.btnLogin-popup');
-
-btnPopup.addEventListener("click", () => {
-    window.location.href = "/login";
-});
+if(btnPopup) {
+    btnPopup.addEventListener("click", () => {
+        window.location.href = "/login";
+    });
+}
 
 // const wrapper = document.querySelector('.wrapper');
 // const loginLink = document.querySelector('.login-link');

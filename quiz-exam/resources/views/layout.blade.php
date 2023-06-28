@@ -22,12 +22,10 @@
                 <span class="image">
                     <i class='bx bx-user icon'></i>
                 </span>
-                @auth
-                    <div class="text logo-text">
-                        <span class="name">Name</span>
-                        <span class="email">Email</span>
-                    </div>
-                @endauth
+                <div class="text logo-text">
+                    <span class="name">Name</span>
+                    <span class="email">Email</span>
+                </div>
             </div>
 
             <i class='bx bx-chevron-right toggle'></i>
@@ -92,7 +90,7 @@
     <div class="top-bar">
         <a class="main-name text">Quizzeo</a>
         @if(!auth()->check())
-            <button class="btnLogin-popup text" href="{{ route('login') }}">Login</button>
+            <button class="btnLogin-popup text">Login</button>
         @endif
     </div>
 

@@ -269,25 +269,16 @@ header .image-text .email{
 
 .home{
     position: relative;
-    text-align: center;
     height: 100vh;
-    width: 100%;
+    width: 85%;
+    left: 10%;
+    right: 5%;
     transition: var(--tran-05);
     z-index: 98;
 }
+
 .home .text{
-    font-size: 30px;
-    font-weight: 500;
+    font-size: 24px;
+    font-weight: 400;
     color: var(--text-color);
-}
-
-.categories{
-    position: absolute;
-    left: 50%;
-    margin: 50px 0px;
-    padding: 50px 0px;
-    background-color: white;
-    border-radius: 20px;
-    transform: translate(-50%,0);
-
 }

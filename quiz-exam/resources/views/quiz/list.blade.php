@@ -1,11 +1,24 @@
 @extends('layout')
 @section('title', 'Quiz List')
 
+@section('styles')
+
+<link rel="stylesheet" href="{{asset('css/quizPage.css')}}">
+@endsection
 
 @section('content')
 <section class="home">
-    <h1>Quiz List</h1>
-    <div id="quizContainer"></div>
+    <div class="hero-section">
+        <div class="total text"><i class='bx bxs-hot'></i>Total quizzes: 
+            <span class="number">20</span>
+        </div>
+    </div>
+
+    <div id="quizContainer">
+        <div class="quiz-grid">
+            
+        </div>
+    </div>
 </section>
 @endsection
 

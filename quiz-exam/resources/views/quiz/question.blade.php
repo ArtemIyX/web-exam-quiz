@@ -41,7 +41,8 @@
             body: JSON.stringify(payload),
         });
         try {
-            console.log(await response.json());
+            const jsonData = await response.json();
+            window.location.href = `/quiz/result/${jsonData.result}`;
         }
         catch(error) {
             console.error(error);

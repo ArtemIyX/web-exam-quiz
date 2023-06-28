@@ -20,6 +20,6 @@ class CustomAuthFilter
             return $next($request);
         }
 
-        return redirect()->route('index')->withErrors(['Auth' => 'Access denied']);
+        return redirect()->route('register');
     }
 }

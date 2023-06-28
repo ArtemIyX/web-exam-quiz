@@ -1,21 +1,39 @@
 @extends('layout')
 @section('title', 'Quiz Details')
 
+@section('styles')
+
+<link rel="stylesheet" href="{{asset('css/welcomeQuiz.css')}}">
+@endsection
+
 @section('content')
 
-<div>
+<div class="welcome-screen">
     <h1>{{ $quizDetails->title }}</h1>
-    <p>{{ $quizDetails->description }}</p>
-    <p>Author: {{ $quizDetails->author_name }}</p>
-    <p>Question Number: {{ $quizDetails->questions_count }}</p>
-    <p>Time Passed: {{ $quizDetails->times_passed }}</p>
-    <hr>
+    <p class="description">Description: {{ $quizDetails->description }}</p>
+    <p class="author">Author: {{ $quizDetails->author_name }}</p>
+    <p class="question-num">Question Number: {{ $quizDetails->questions_count }}</p>
+    <p class ="time-passed">Time Passed: {{ $quizDetails->times_passed }}</p>
     <div>
         @auth
-            <a href="take/{{$quizDetails->id}}">Take!</a>
+        <div class="btnTake">
+            <p>Take!</a>
+        </div>
         @else
-            <p>Login to take quiz</p>
+            <p class="unauth">Login to take quiz</p>
         @endauth
     </div>
 </div>
+
+@endsection
+
+@section('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const btnTake = document.querySelector('.btnTake');
+        btnTake.addEventListener("click" , () => {
+            window.location.href = `/quiz/take/{{ $quizDetails->id }}`;
+        });
+    });
+</script>
 @endsection

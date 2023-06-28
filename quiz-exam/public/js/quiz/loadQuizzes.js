@@ -21,6 +21,7 @@ async function renderQuizzes() {
   
         const btnCheck = document.createElement('div');
         btnCheck.classList.add('btn-check');
+        
   
         const titleElement = document.createElement('h3');
         titleElement.textContent = title;
@@ -47,15 +48,13 @@ async function renderQuizzes() {
         linkElement.textContent = 'Check';
         btnCheck.appendChild(linkElement);
   
+        btnCheck.addEventListener('click',() =>  {
+            console.log(id);
+      });
+
         quizGrid.appendChild(btnCheck);
   
         html += quizGrid.outerHTML;
-        
-        quizContainer.addEventListener('click', (event) => {
-            if (event.target.classList.contains('btn-check')) {
-                window.location.href = `/quiz/${id}`;
-            }
-          });
       }
   
       quizContainer.innerHTML = html;

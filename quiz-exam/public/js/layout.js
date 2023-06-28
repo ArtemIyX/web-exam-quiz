@@ -10,7 +10,6 @@ sidebar.addEventListener("mouseleave" , () =>{
     sidebar.classList.toggle("close");
 });
 
-
 searchBtn.addEventListener("click" , () =>{
     sidebar.classList.remove("close");
 });
@@ -38,3 +37,11 @@ btnPopup.addEventListener("click", () => {
 // btnPopup.addEventListener('click', ()=> {
 //     wrapper.classList.toggle('active-popup');
 // });
+
+
+function applyUserData(user) {
+    var nameElement = document.querySelector('.name');
+    var emailElement = document.querySelector('.email');
+    nameElement.textContent = user.name;
+    emailElement.textContent = user.email;
+}

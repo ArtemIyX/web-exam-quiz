@@ -1,46 +1,4 @@
-// Fetch quizzes asynchronously
-async function fetchQuizzes() {
-    try {
-        const response = await fetch('/api/quizzes');
-        const data = await response.json();
-        return data.result;
-    } catch (error) {
-        // Handle any errors
-        console.error('Error:', error);
-        return null;
-    }
-}
 
-async function getQuiz(id) {
-    try {
-        const response = await fetch(`/api/quiz/${id}`);
-        const data = await response.json();
-        return data.result;
-    }
-    catch(error) {
-         // Handle any errors
-         console.error('Error:', error);
-         return null;
-    }
-}
-
-async function fetchUserName(userId) {
-    try {
-        const response = await fetch(`/api/user/${userId}`);
-        const data = await response.json();
-
-        if (data.retCode === 0) {
-            const userName = data.result;
-            //console.log('User Name:', userName);
-            return userName;
-        } else {
-            console.error('Error:', data.retMsg);
-            return null;
-        }
-    } catch (error) {
-        console.error('Fetch Error:', error);
-    }
-}
 
 // Render quizzes on the page
 async function renderQuizzes() {
@@ -52,7 +10,8 @@ async function renderQuizzes() {
         let html = '';
         for (const quiz of quizzes) {
             const {id, title, description, author_id, created_at } = quiz;
-            const userName = await fetchUserName(author_id);
+            const user = await getUser(author_id);
+            const userName = user.name;
             const date = new Date(created_at);
             const formattedDate = date.toLocaleDateString();
             html += `

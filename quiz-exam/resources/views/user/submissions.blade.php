@@ -7,6 +7,9 @@
     <div id="pagination"></div>
 </div>
 
+@endsection
+
+@section('scripts')
 <script src="{{ asset('js/quiz/submissions.js') }}"></script>
 <script src="{{asset('js/quiz/loadQuizzes.js')}}"></script>
 <script>
@@ -52,4 +55,5 @@
     load();
 
 </script>
+
 @endsection

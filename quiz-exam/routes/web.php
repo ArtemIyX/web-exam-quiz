@@ -32,7 +32,7 @@ Route::prefix('api')->group(function() {
     Route::get('/questions/{quiz_id}', [QuizController::class, 'questions']);
     Route::get('/options/{quiz_id}', [QuizController::class, 'options']);
     Route::get('/matches/{quiz_id}', [QuizController::class, 'matches']);
-    Route::get('/user/{id}', [UserController::class, 'getUserNameById']);
+    Route::get('/user/{id}', [UserController::class, 'get']);
     Route::get('/user/{id}/submissions', [UserController::class, 'getSubmissions']);
 });
 

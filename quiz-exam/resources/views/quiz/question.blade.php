@@ -3,14 +3,21 @@
 @section('title', 'Quiz')
 
 @section('content')
-<div id="questions-container"></div>
-<button id="sendButton">Finish</button>
-
+<div id="loadingDiv">
+    <p>
+        Loading quiz...
+    </p>
+</div>
+<div id="loadedDiv" style="display: none">
+    <div id="questions-container"></div>
+    <button id="sendButton">Finish</button>
+</div>
 <script src="{{ asset('js/quiz/question.js') }}"></script>
+<script src="{{ asset('js/loading.js') }}"></script>
 <script>
     async function load() {
         let res = await loadQuestions({{$quiz_id}});
-        renderQuestions(res);
+        await renderQuestions(res);
     }
 
 
@@ -47,7 +54,9 @@
         // Bind the click event to the button and associate it with the buttonClick function
         button.addEventListener('click', finishClick);
 
-        load();
+        load().then(function () {
+            finishdLoading();
+        });
     });
 
 </script>

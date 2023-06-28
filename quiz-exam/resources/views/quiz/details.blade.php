@@ -8,6 +8,10 @@
 <p>Author: {{ $quizDetails->author_name }}</p>
 <p>Question Number: {{ $quizDetails->questions_count }}</p>
 <p>Time Passed: {{ $quizDetails->times_passed }}</p>
+<hr>
+@auth
 <a href="take/{{$quizDetails->id}}">Take!</a>
-
+@else
+<p>Login to take quiz</p>
+@endauth
 @endsection

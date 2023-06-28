@@ -35,16 +35,16 @@ Route::prefix('api')->group(function() {
 });
 
 Route::prefix('quiz')->group(function () {
+    Route::get('/take/{quiz_id}', [QuizController::class, 'take'])->middleware('auth');
+    Route::post('/store', [QuizController::class, 'storeAnswer'])->middleware('auth');;
+    
     Route::get('/{quiz_id}', [QuizController::class, 'details']);
-    Route::get('/take/{quiz_id}', [QuizController::class, 'take']);
-    Route::post('/store', [QuizController::class, 'storeAnswer']);
     Route::get('/result/{sub_id}', [QuizController::class, 'result']);
 });
 
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/logout', [RegisterController::class, 'logout'])->name('logout');
-
     Route::post('/user/update', [HomeController::class, 'update'])->name('user.update');
     Route::post('/user/updatePassword', [HomeController::class, 'updatePassword'])->name('user.update.password');
     Route::get('/user/details', [HomeController::class, 'user'])->name('user.details');

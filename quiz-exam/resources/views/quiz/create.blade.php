@@ -1,6 +1,10 @@
 @extends('layout')
 @section('title', 'Quiz Creation')
 
+@section('styles')
+<link rel="stylesheet" href="{{asset('css/quizPage.css')}}">
+@endsection
+
 @section('content')
 <div style="left:400px; position: absolute">
     <h1>Create Quiz</h1>

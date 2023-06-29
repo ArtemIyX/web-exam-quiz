@@ -56,14 +56,14 @@
 
                     <li class="nav-link">
                         @auth
-                            <a href="{{route('index')}}">
-                                <i class='bx bx-bookmark icon'></i>
-                                <span class="text nav-text">Favorites</span>
+                            <a href="{{route('create')}}">
+                                <i class='bx bx-add-to-queue icon'></i>
+                                <span class="text nav-text">Create Quiz</span>
                             </a>
                         @else
                             <a href="{{route('login')}}">
-                                <i class='bx bx-bookmark icon'></i>
-                                <span class="text nav-text">Favorites</span>
+                                <i class='bx bx-add-to-queue icon'></i>
+                                <span class="text nav-text">Create Quiz</span>
                             </a>
                         @endauth
 

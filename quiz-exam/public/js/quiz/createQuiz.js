@@ -3,6 +3,16 @@ function addQuestion(questionType) {
     var questionContainer = document.createElement('div');
     questionContainer.className = 'question-container';
 
+    if (questionType === 'radio') {
+        var questionTypeLabel = document.createElement('label');
+        questionTypeLabel.textContent = 'Question Type: Radio Button';
+        questionContainer.appendChild(questionTypeLabel);
+    } else if (questionType === 'dropdown') {
+        var questionTypeLabel = document.createElement('label');
+        questionTypeLabel.textContent = 'Question Type: Dropdown Box';
+        questionContainer.appendChild(questionTypeLabel);
+    }
+
     var questionTitle = document.createElement('input');
     questionTitle.type = 'text';
     questionTitle.placeholder = 'Question Title';
@@ -21,16 +31,6 @@ function addQuestion(questionType) {
         questionContainer.parentNode.removeChild(questionContainer);
     };
     questionContainer.appendChild(removeQuestionButton);
-
-    if (questionType === 'radio') {
-        var questionTypeLabel = document.createElement('label');
-        questionTypeLabel.textContent = 'Question Type: Radio Button';
-        questionContainer.appendChild(questionTypeLabel);
-    } else if (questionType === 'dropdown') {
-        var questionTypeLabel = document.createElement('label');
-        questionTypeLabel.textContent = 'Question Type: Dropdown Box';
-        questionContainer.appendChild(questionTypeLabel);
-    }
 
     document.getElementById('quiz-container').appendChild(questionContainer);
 }

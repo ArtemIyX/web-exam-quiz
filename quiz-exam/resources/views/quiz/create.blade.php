@@ -2,23 +2,26 @@
 @section('title', 'Quiz Creation')
 
 @section('styles')
-<link rel="stylesheet" href="{{asset('css/quizPage.css')}}">
+<link rel="stylesheet" href="{{asset('css/create.css')}}">
 @endsection
 
 @section('content')
-<div style="left:400px; position: absolute">
+<div class="create-container">
     <h1>Create Quiz</h1>
+    <div class="header">
+        <label for="quiz-name">Quiz Name:</label>
+        <input type="text" id="quiz-name" placeholder="Quiz Name"><br>    
+        <label for="quiz-description">Quiz Description:</label>
+        <input type="text" id="quiz-description" placeholder="Quiz Description"><br>
+    </div>
 
-    <label for="quiz-name">Quiz Name:</label>
-    <input type="text" id="quiz-name" placeholder="Quiz Name"><br>
-
-    <label for="quiz-description">Quiz Description:</label>
-    <textarea id="quiz-description" placeholder="Quiz Description"></textarea><br>
+    <div class="quiz-buttons">
+        <button onclick="addQuestion('radio')">Add Radio Type Question</button>
+        <button onclick="addQuestion('dropdown')">Add Dropdown Type Question</button>
+    </div>
 
     <div id="quiz-container"></div>
-    <button onclick="addQuestion('radio')">Add Radio Type Question</button>
-    <button onclick="addQuestion('dropdown')">Add Dropdown Type Question</button>
-    <button onclick="submitQuiz()">Submit Quiz</button>
+    <button class="submitQuiz" onclick="submitQuiz()">Submit Quiz</button>
 </div>
 
 @endsection

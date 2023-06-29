@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Quiz;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -12,7 +13,8 @@ class HomeController extends Controller
 {
     public function index()
     {
-        return view('quiz/list');
+        $quiz_count = Quiz::all()->count();
+        return view('quiz/list', ['quiz_count'=> $quiz_count]);
     }
 
     public function update(Request $request)

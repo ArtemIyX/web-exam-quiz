@@ -10,7 +10,7 @@
 <section class="home">
     <div class="hero-section">
         <div class="total text"><i class='bx bxs-hot'></i>Total quizzes:
-            <span class="number">20</span>
+            <span class="number">{{$quiz_count}}</span>
         </div>
     </div>
     <div id="loading-div">

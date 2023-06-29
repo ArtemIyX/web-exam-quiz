@@ -1,23 +1,26 @@
 @extends('layout')
 @section('title', 'Quiz Result')
 
+@section('styles')
+<link rel="stylesheet" href="{{asset('css/results.css')}}">
+@endsection
+
 @section('content')
-<h1>Quiz Result</h1>
 <div id="loadingDiv">
 <p>
     Loading results...
 </p>
 </div>
 <div id="loadedDiv" style="display:none;">
-    <div>
-        <div>
+    <div class="result-container">
+        <h1>Quiz Result</h1>
+        <div class="submitter-information">
             <h2>User Details</h2>
             <p>
                 Submitter: <span id="user_name"></span>
             </p>
-            <h2>Quiz Details</h2>
         </div>
-        <div>
+        <div class="quiz-information">
             <h3 id="quiz_title"></h3>
             <p>
                 Description: <span id="quiz_desc"></span>
@@ -37,11 +40,11 @@
             </p>
         </div>
 
-    </div>
-
     <div id="questions-container">
 
     </div>
+</div>
+
 </div>
 @endsection
 
@@ -61,9 +64,11 @@
             await applyMatches(results.total.correct_matches);
         }
         load().then(function() {
-            finishdLoading();
+            finishdLoading();    
         });
     });
+
+
 
 </script>
 @endsection

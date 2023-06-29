@@ -60,7 +60,7 @@ async function renderQuizzes() {
         html_result.forEach(element => {
             quizContainer.appendChild(element.grid);
             element.button.addEventListener('click', (event) => {
-                window.location.href = `/quiz/take/${element.quiz_id}`
+                window.location.href = `/quiz/${element.quiz_id}`
                 console.log(element.quiz_id);
             });
         });

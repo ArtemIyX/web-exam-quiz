@@ -2,6 +2,10 @@
 @extends('layout')
 @section('title', 'Quiz')
 
+@section('styles')
+<link rel="stylesheet" href="{{asset('css/question.css')}}">
+@endsection
+
 @section('content')
 <div id="loadingDiv">
     <p>
@@ -9,8 +13,11 @@
     </p>
 </div>
 <div id="loadedDiv" style="display: none">
-    <div id="questions-container"></div>
-    <button id="sendButton">Finish</button>
+    <div id="main-container">
+        <div id="questions-container">
+        </div>
+        <button id="sendButton">Finish</button>
+    </div>
 </div>
 
 @endsection

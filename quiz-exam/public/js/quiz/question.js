@@ -49,6 +49,13 @@ async function renderAnswers(optionsContainer, options) {
         const radioInput = document.createElement('input');
         const optionLabel = document.createElement('label');
 
+        radioDiv.addEventListener('click', (event) =>{
+            if(!radioInput.disabled){
+                radioInput.checked = true;
+                radioDiv.classList.toggle('active');
+            }
+        })
+
         radioInput.type = 'radio';
         radioInput.name = option.question_id;
         radioInput.value = option.id;

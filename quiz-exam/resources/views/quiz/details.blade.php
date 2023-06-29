@@ -10,10 +10,12 @@
 
 <div class="welcome-screen">
     <h1>{{ $quizDetails->title }}</h1>
-    <p class="description">Description: {{ $quizDetails->description }}</p>
-    <p class="author">Author: {{ $quizDetails->author_name }}</p>
-    <p class="question-num">Question Number: {{ $quizDetails->questions_count }}</p>
-    <p class ="time-passed">Time Passed: {{ $quizDetails->times_passed }}</p>
+    <div class="information">
+        <p class="description">Description: {{ $quizDetails->description }}</p>
+        <p class="author">Author: {{ $quizDetails->author_name }}</p>
+        <p class="question-num">Question Number: {{ $quizDetails->questions_count }}</p>
+        <p class ="time-passed">Time Passed: {{ $quizDetails->times_passed }}</p>
+    </div>
     <div>
         @auth
         <div class="btnTake">

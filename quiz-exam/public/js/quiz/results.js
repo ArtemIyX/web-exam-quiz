@@ -50,17 +50,19 @@ function applyOptions(correct_options) {
         // console.log(question_answer);
         const options = Array.from(question.querySelectorAll('.option-container'));
         let correctLabel = null;
-        options.forEach((option) => {
-            const radioButton = option.querySelector('input[type="radio"]');
-            radioButton.readOnly = true;
-            radioButton.disabled = true;
-            if(radioButton.value == question_answer.selected_option_id) {
-                radioButton.checked = true;
-            }
-            if(radioButton.value == question_answer.correct_option_id) {
-                correctLabel = option.querySelector('label');
-            }
-        });
+        // options.forEach((option) => {
+        //     const radioButton = option.querySelector('input[type="radio"]');
+        //     radioButton.readOnly = true;
+        //     radioButton.disabled = true;
+        //     if(radioButton.value == question_answer.selected_option_id) {
+        //         radioButton.checked = true;
+        //     }
+        //     if(radioButton.value == question_answer.correct_option_id) {
+        //         correctLabel = option.querySelector('label');
+        //     }
+        // });
+
+
 
         if(!question_answer.correct) {
             const paragraph = document.createElement('p');

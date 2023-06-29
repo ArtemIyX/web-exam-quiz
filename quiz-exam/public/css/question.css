@@ -1,0 +1,132 @@
+#main-container{
+    position: absolute;
+    width: 100%;
+    max-width: 800px;
+    overflow-wrap: break-word;
+    border: 2px solid rgba(255, 255, 255, 0.613);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column; 
+    left: 50%;
+    transform: translate(-50%);
+    z-index: 97;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 30px;
+}
+
+#questions-container{
+    width: 90%;
+}
+
+.question_Option .text-question,
+.question_Match .text-question{
+    font-size: 25px;
+    color: var(--login-color);
+    font-weight: 600;
+    border-bottom: 0.7px solid #3333334d;
+    padding-bottom: 30px;
+}
+
+
+.question_Option,
+.question_Match{
+    padding: 20px 0;
+}
+
+.option-container{
+    background: #fff;
+    color: var(--login-color);
+    font-weight: 500;
+    width: 100%;
+    border: 1px solid #222;
+    padding: 10px;
+    margin: 10px 0;
+    text-align: left;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.option-container:hover{
+    background-color: var(--primary-color);
+    color:#fff;
+}
+.option-container input{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.option-container.active{
+    background-color: var(--primary-color-light);
+    color: white;
+}
+
+.match-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.match-container p{
+    font-size: 18px;
+    text-align: center;
+    width: 40%;
+    color: white;
+    background-color: var(--primary-color);
+    border-radius: 6px;
+    margin: 5px 0;
+    padding: 5px 5px;
+}
+
+.match-container select{
+    margin: 5px 0;
+    padding: 5px 5px;
+    font-size: 18px;
+    text-align: center;
+    width: 40%;
+    border: var(--primary-color-light) solid 1px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.match-container select:hover{
+    background-color: #ffffff63;
+}
+
+#sendButton{
+    font-size: 26px;
+    background-color: var(--primary-color-light);
+    color: #fff;
+    font-weight: 500;
+    width: 230px;
+    border: 0;
+    padding: 15px;
+    margin: 30px auto 0;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+}
+
+#loadingDiv{
+    position: absolute;
+    top:0;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    z-index: 9999;
+}
+#loadingDiv p{
+    background-color: #ffffff;
+    padding: 20px;
+    text-align: center;
+    font-size: 30px;
+}

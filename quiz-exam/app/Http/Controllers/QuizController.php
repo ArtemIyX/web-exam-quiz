@@ -304,9 +304,20 @@ class QuizController extends Controller
             $matches_correct = [];
 
             foreach ($questions as $question) {
+                if(!$question) {
+                    throw new Exception("Question is null");
+                }
                 if ($question->question_type == 'Option') {
                     $correctOption = $question->options()->firstWhere('is_correct', true);
+                    if(!$correctOption) {
+                        throw new Exception("Correct option is null");
+                    }
+
                     $selectedOption = $sub->options()->firstWhere('question_id', $question->id);
+
+                    if(!$selectedOption) {
+                        throw new Exception("Selected option is null");
+                    }
                     if (!$selectedOption) {
                         array_push($option_correct, (object) [
                             'question_id' => $question->id,
@@ -333,15 +344,21 @@ class QuizController extends Controller
                 } else if ($question->question_type == 'Match') {
 
                     $right_matches = $question->matches()->where('is_right', true)->get();
+
                     $left_matches = $question->matches()->where('is_right', false)->get();
 
                     $point_per_match = floatval($question->points) / $question->matches()->where('is_right', false)->count();
 
                     // For each left match in this question
                     foreach ($left_matches as $left_match) {
-
+                        if(!$left_match) {
+                            throw new Exception("Left match is null");
+                        }
                         // Get correct right match for this left
                         $correct_right_match = $right_matches->firstWhere('parent_id', $left_match->id);
+                        if(!$correct_right_match) {
+                            throw new Exception("correct_right_match match is null");
+                        }
 
                         // Get user right match
                         $user_left_match = $sub->matches()->firstWhere('left_match_id', $left_match->id);
@@ -526,6 +543,7 @@ class QuizController extends Controller
                         $item->question_id = $question->id;
                         $item->item = $o['title'];
                         $item->is_right = false;
+                        $item->save();
                         foreach($o['answers'] as $a) {
                             $i = new MatchItem();
                             $i->question_id = $question->id;

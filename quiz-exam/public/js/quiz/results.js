@@ -52,15 +52,17 @@ function applyOptions(correct_options) {
         // console.log("Correct answer for q_id:" + q_id + " is:");
         // console.log(question_answer);
         const options = Array.from(question.querySelectorAll('.option-container'));
-
+        options.forEach(element => {
+            getRadioFromOption(element).disabled = true;
+        });
         const correctDiv = options.find((item) => {
             return getRadioFromOption(item).value == question_answer.correct_option_id;
-        })
+        });
         correctDiv.classList.add('correct-answer');
         if(!question_answer.correct) {
             const unCorrectDiv = options.find((item) => {
                 return getRadioFromOption(item).value == question_answer.selected_option_id;
-            })
+            });
             unCorrectDiv.classList.add('wrong-answer');
         }
 

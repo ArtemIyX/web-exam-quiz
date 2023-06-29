@@ -83,9 +83,9 @@
 }
 
 .option-container input{
-    /* -webkit-appearance: none;
+    -webkit-appearance: none;
     -moz-appearance: none;
-    appearance: none; */
+    appearance: none;
 }
 
 .option-container.active{
@@ -94,10 +94,10 @@
 }
 
 .option-container.correct-answer{
-    background-color: greenyellow;
+    background-color: rgba(172, 255, 47, 0.5);
 }
 .option-container.wrong-answer{
-    background-color: red;
+    background-color: rgba(255, 0, 0, 0.5);
 }
 
 .match-container{

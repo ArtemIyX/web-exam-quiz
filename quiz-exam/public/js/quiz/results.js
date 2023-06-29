@@ -14,7 +14,6 @@ async function loadResults(sub_id) {
     }
 }
 
-
 function applyUserDetails(submitter) {
     const userNameElement = document.getElementById("user_name");
     userNameElement.textContent = submitter.name;
@@ -40,6 +39,10 @@ function applyTotal(total) {
     maxMarkElement.textContent = total.max_point;
 }
 
+function getRadioFromOption(optionDiv) {
+    return optionDiv.querySelector('input[type="radio"]');
+}
+
 function applyOptions(correct_options) {
     const questions = Array.from(document.getElementsByClassName("question_Option"));
     // console.log(questions);
@@ -61,14 +64,23 @@ function applyOptions(correct_options) {
         //         correctLabel = option.querySelector('label');
         //     }
         // });
-
-
-
+        const correctDiv = options.find((item) => {
+            return getRadioFromOption(item).value == question_answer.correct_option_id;
+        })
+        correctDiv.classList.add('correct-answer');
         if(!question_answer.correct) {
-            const paragraph = document.createElement('p');
-            paragraph.textContent = `X Correct: ${correctLabel.textContent}`;
-            question.appendChild(paragraph);
+            const unCorrectDiv = options.find((item) => {
+                return getRadioFromOption(item).value == question_answer.selected_option_id;
+            })
+            unCorrectDiv.classList.add('wrong-answer');
         }
+
+
+        // if(!question_answer.correct) {
+        //     const paragraph = document.createElement('p');
+        //     paragraph.textContent = `X Correct: ${correctLabel.textContent}`;
+        //     question.appendChild(paragraph);
+        // }
 
         applyPoints(question, question_answer.points);
     });

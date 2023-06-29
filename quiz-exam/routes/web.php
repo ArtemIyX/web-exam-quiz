@@ -41,7 +41,7 @@ Route::prefix('api')->group(function() {
 
 Route::prefix('quiz')->group(function () {
     Route::get('/take/{quiz_id}', [QuizController::class, 'take'])->middleware('auth');
-    Route::get('/create', [QuizController::class, 'create'])->middleware('auth');
+    Route::get('/create', [QuizController::class, 'create'])->middleware('auth')->name('create');
     Route::post('/store', [QuizController::class, 'storeAnswer'])->middleware('auth');
 
     Route::get('/{quiz_id}', [QuizController::class, 'details']);

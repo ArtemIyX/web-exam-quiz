@@ -52,18 +52,7 @@ function applyOptions(correct_options) {
         // console.log("Correct answer for q_id:" + q_id + " is:");
         // console.log(question_answer);
         const options = Array.from(question.querySelectorAll('.option-container'));
-        let correctLabel = null;
-        // options.forEach((option) => {
-        //     const radioButton = option.querySelector('input[type="radio"]');
-        //     radioButton.readOnly = true;
-        //     radioButton.disabled = true;
-        //     if(radioButton.value == question_answer.selected_option_id) {
-        //         radioButton.checked = true;
-        //     }
-        //     if(radioButton.value == question_answer.correct_option_id) {
-        //         correctLabel = option.querySelector('label');
-        //     }
-        // });
+
         const correctDiv = options.find((item) => {
             return getRadioFromOption(item).value == question_answer.correct_option_id;
         })
@@ -75,12 +64,6 @@ function applyOptions(correct_options) {
             unCorrectDiv.classList.add('wrong-answer');
         }
 
-
-        // if(!question_answer.correct) {
-        //     const paragraph = document.createElement('p');
-        //     paragraph.textContent = `X Correct: ${correctLabel.textContent}`;
-        //     question.appendChild(paragraph);
-        // }
 
         applyPoints(question, question_answer.points);
     });
